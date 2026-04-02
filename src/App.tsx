@@ -1,0 +1,497 @@
+﻿
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { useState, useEffect, useCallback, useMemo } from "react";
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  History as HistoryIcon,
+  LogOut,
+  Plus,
+  Minus,
+  Undo2,
+  StickyNote,
+} from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+
+const DAYS_HDR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const TIMES = ["None"];
+for (let h = 7; h <= 21; h++) {
+  for (let m = 0; m < 60; m += 15) {
+    const hr = h > 12 ? h - 12 : h === 0 ? 12 : h;
+    TIMES.push(`${hr}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`);
+  }
+}
+
+const DEFAULT_THEME = {
+  collin: { primary: "#34d399", bg: "#ecfdf5", text: "#064e3b", border: "#a7f3d0" },
+  tiia: { primary: "#60a5fa", bg: "#eff6ff", text: "#1e3a8a", border: "#bfdbfe" },
+};
+
+const TODAY = "2026-04-02";
+const EVENTS: Record<string, { t: string; tm: string; w?: string }[]> = {
+  "2026-03-30": [{ t: "Julia swim class", tm: "4:00 PM" }],
+  "2026-04-01": [{ t: "Team standup", tm: "9:00 AM", w: "collin" }],
+  "2026-04-02": [{ t: "Parent-teacher", tm: "3:30 PM" }, { t: "Yoga", tm: "6:00 PM", w: "tiia" }],
+  "2026-04-03": [{ t: "Dentist (Julia)", tm: "2:00 PM", w: "tiia" }],
+  "2026-04-04": [{ t: "Date night", tm: "7:30 PM", w: "collin" }],
+  "2026-04-05": [{ t: "Julia birthday party", tm: "11:00 AM" }],
+  "2026-04-07": [{ t: "Gym", tm: "6:30 AM", w: "collin" }],
+  "2026-04-09": [{ t: "Client dinner", tm: "7:00 PM", w: "collin" }, { t: "Yoga", tm: "6:00 PM", w: "tiia" }],
+  "2026-04-10": [{ t: "Work drinks", tm: "5:30 PM", w: "tiia" }],
+  "2026-04-12": [{ t: "Julia swim comp", tm: "9:00 AM" }],
+  "2026-04-13": [{ t: "Julia piano", tm: "4:00 PM" }],
+  "2026-04-15": [{ t: "Dentist", tm: "2:00 PM", w: "collin" }],
+  "2026-04-16": [{ t: "School play", tm: "6:00 PM" }],
+};
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+function fmt(d: Date) {
+  return d.toISOString().split("T")[0];
+}
+function fmtDay(d: Date) {
+  if (isNaN(d.getTime())) return "Invalid Date";
+  return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+}
+function dow(d: Date) {
+  return (d.getDay() + 6) % 7;
+}
+function addD(d: Date, n: number) {
+  const r = new Date(d);
+  r.setDate(r.getDate() + n);
+  return r;
+}
+function weekStart(d: Date) {
+  const r = new Date(d);
+  r.setDate(r.getDate() - dow(r));
+  return r;
+}
+
+function initSchedule() {
+  const s: Record<string, any> = {};
+  const pat = [0, 0, 1, 1, 0, 0, 1];
+  let d = new Date("2026-03-01");
+  const end = new Date("2026-06-01");
+  while (d < end) {
+    const k = fmt(d);
+    const di = dow(d);
+    s[k] = { night: pat[di] === 0 ? "collin" : "tiia", pickup: "None", daycare: di <= 4, note: "" };
+    d = addD(d, 1);
+  }
+  s["2026-04-05"].note = "Julia's friend Mia's birthday party at 11am";
+  s["2026-04-12"].note = "Swim competition - bring goggles + towel";
+  s["2026-04-16"].note = "School play at 6pm, both attending";
+  return s;
+}
+
+function seedData() {
+  return {
+    schedule: initSchedule(),
+    proposals: [
+      {
+        id: "d1",
+        from: "tiia",
+        created: "2026-03-24T14:15:00Z",
+        changes: [
+          { date: "2026-03-28", was: { night: "collin", pickup: "10:00 AM", daycare: false }, to: { night: "tiia", pickup: "10:00 AM", daycare: false } },
+          { date: "2026-03-29", was: { night: "tiia", pickup: "10:00 AM", daycare: false }, to: { night: "collin", pickup: "10:00 AM", daycare: false } },
+        ],
+        note: "Julia's swimming comp Sunday morning",
+        status: "accepted",
+        response: "Makes sense",
+        respondedBy: "collin",
+        respondedAt: "2026-03-24T16:00:00Z",
+      },
+      {
+        id: "d2",
+        from: "collin",
+        created: "2026-03-18T09:00:00Z",
+        changes: [{ date: "2026-03-19", was: { night: "tiia", pickup: "5:30 PM", daycare: true }, to: { night: "tiia", pickup: "6:00 PM", daycare: true } }],
+        note: "Running late from work",
+        status: "accepted",
+        response: "",
+        respondedBy: "tiia",
+        respondedAt: "2026-03-18T10:30:00Z",
+      },
+    ],
+  };
+}
+
+const STORE_KEY = "coparent-v5";
+
+function Pill({ who, theme, small }: { who: "collin" | "tiia"; theme: any; small?: boolean }) {
+  const config = theme[who];
+  return (
+    <span className={`inline-block rounded px-2 py-0.5 font-medium ${small ? "text-[10px]" : "text-[11px]"}`} style={{ backgroundColor: config.bg, color: config.text }}>
+      {who === "collin" ? "Collin" : "Tiia"}
+    </span>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const styles: Record<string, string> = { accepted: "bg-emerald-100 text-emerald-700", declined: "bg-rose-100 text-rose-700", pending: "bg-amber-100 text-amber-700" };
+  return <span className={`text-[10px] px-2 py-0.5 rounded font-semibold uppercase tracking-wider ${styles[status] || styles.pending}`}>{status}</span>;
+}
+
+function NightToggle({ value, theme, onChange }: { value: "collin" | "tiia"; theme: any; onChange: (v: "collin" | "tiia") => void }) {
+  return (
+    <div onClick={() => onChange(value === "collin" ? "tiia" : "collin")} className="inline-flex cursor-pointer rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
+      <div className={`px-3 py-1 text-[11px] font-bold transition-all ${value === "collin" ? "shadow-sm" : "text-slate-400"}`} style={value === "collin" ? { backgroundColor: theme.collin.primary, color: theme.collin.text } : {}}>C</div>
+      <div className={`px-3 py-1 text-[11px] font-bold transition-all ${value === "tiia" ? "shadow-sm" : "text-slate-400"}`} style={value === "tiia" ? { backgroundColor: theme.tiia.primary, color: theme.tiia.text } : {}}>T</div>
+    </div>
+  );
+}
+
+function DaycareToggle({ on, theme, onToggle }: { on: boolean; theme: any; onToggle: () => void }) {
+  return (
+    <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+      <div onClick={(e) => { e.preventDefault(); onToggle(); }} className={`relative w-9 h-5 rounded-full transition-colors ${on ? "" : "bg-slate-300"}`} style={on ? { backgroundColor: theme.collin.primary } : {}}>
+        <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all shadow-sm ${on ? "left-[18px]" : "left-0.5"}`} />
+      </div>
+      <span className={`text-[11px] font-medium ${on ? "text-slate-900" : "text-slate-400"}`}>Daycare</span>
+    </label>
+  );
+}
+
+function ThemeEditor({ theme, onChange, onSave, onCancel }: { theme: any; onChange: (t: any) => void; onSave: () => void; onCancel: () => void }) {
+  const users = ["collin", "tiia"] as const;
+  const fields = [{ key: "primary", label: "Accent Color" }, { key: "bg", label: "Background Color" }, { key: "text", label: "Text Color" }] as const;
+  return (
+    <div className="max-w-2xl mx-auto p-4 sm:p-6 min-h-screen bg-slate-50">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold text-slate-900">Theme Editor</h2>
+        <div className="flex gap-2">
+          <button onClick={onCancel} className="px-4 py-2 text-slate-600 font-bold text-sm hover:bg-slate-100 rounded-xl transition-all">Cancel</button>
+          <button onClick={onSave} className="px-6 py-2 bg-blue-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-500/20 hover:bg-blue-600 transition-all">Save Changes</button>
+        </div>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2">
+        {users.map((u) => (
+          <div key={u} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h3 className="text-lg font-bold text-slate-800 capitalize mb-4 flex items-center gap-2"><div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme[u].primary }} />{u}'s Colors</h3>
+            <div className="space-y-4">
+              {fields.map((f) => (
+                <div key={f.key}>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{f.label}</label>
+                  <div className="flex items-center gap-3">
+                    <input type="color" value={theme[u][f.key]} onChange={(e) => onChange({ ...theme, [u]: { ...theme[u], [f.key]: e.target.value } })} className="w-10 h-10 rounded-lg border-0 cursor-pointer p-0 overflow-hidden bg-transparent" />
+                    <input type="text" value={theme[u][f.key]} onChange={(e) => onChange({ ...theme, [u]: { ...theme[u], [f.key]: e.target.value } })} className="flex-1 text-xs font-mono bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-blue-400" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Live Preview</h3>
+        <div className="p-4 rounded-xl border border-slate-100 bg-slate-50 flex flex-wrap gap-4">
+          <Pill who="collin" theme={theme} />
+          <Pill who="tiia" theme={theme} />
+          <div className="flex gap-2"><div className="w-8 h-8 rounded-lg" style={{ backgroundColor: theme.collin.primary }} /><div className="w-8 h-8 rounded-lg" style={{ backgroundColor: theme.tiia.primary }} /></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [user, setUser] = useState<"collin" | "tiia" | null>(null);
+  const [page, setPage] = useState<"main" | "history" | "theme">("main");
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [edits, setEdits] = useState<Record<string, any>>({});
+  const [noteOpen, setNoteOpen] = useState<string | null>(null);
+  const [theme, setTheme] = useState(DEFAULT_THEME);
+  const [tempTheme, setTempTheme] = useState(DEFAULT_THEME);
+
+  const initialStart = useMemo(() => weekStart(new Date(TODAY + "T12:00:00")), []);
+  const initialWeeks = useMemo(() => (dow(new Date(TODAY + "T12:00:00")) < 4 ? 2 : 3), []);
+  const [rangeStart, setRangeStart] = useState(initialStart);
+  const [rangeWeeks, setRangeWeeks] = useState(initialWeeks);
+  const allDays = useMemo(() => Array.from({ length: rangeWeeks * 7 }, (_, i) => addD(rangeStart, i)), [rangeStart, rangeWeeks]);
+
+  const canRemovePrev = rangeStart.getTime() < initialStart.getTime();
+  const canRemoveNext = (rangeStart.getTime() + (rangeWeeks - 1) * 7 * 24 * 60 * 60 * 1000) > initialStart.getTime();
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setData(parsed);
+        if (parsed.theme) {
+          setTheme(parsed.theme);
+          setTempTheme(parsed.theme);
+        }
+      } else {
+        const d = seedData();
+        setData(d);
+        localStorage.setItem(STORE_KEY, JSON.stringify(d));
+      }
+    } catch (e) {
+      console.error("Failed to load data:", e);
+      setData(seedData());
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const save = useCallback((nd: any, nt?: any) => {
+    const payload = { ...nd, theme: nt || theme };
+    setData(nd);
+    if (nt) setTheme(nt);
+    localStorage.setItem(STORE_KEY, JSON.stringify(payload));
+  }, [theme]);
+
+  const handleRespond = (id: string, status: string, response: string) => {
+    if (!data || !user) return;
+    const props = data.proposals.map((p: any) => (p.id !== id ? p : { ...p, status, response, respondedBy: user, respondedAt: new Date().toISOString() }));
+    const sched = { ...data.schedule };
+    if (status === "accepted") {
+      const prop = data.proposals.find((p: any) => p.id === id);
+      if (prop) prop.changes.forEach((c: any) => { sched[c.date] = { ...sched[c.date], night: c.to.night, pickup: c.to.pickup, daycare: c.to.daycare }; });
+    }
+    save({ ...data, proposals: props, schedule: sched });
+  };
+
+  const handleProposal = (proposal: any, noteChanges: Record<string, string>) => {
+    if (!data) return;
+    const sched = { ...data.schedule };
+    Object.keys(noteChanges).forEach((k) => { sched[k] = { ...sched[k], note: noteChanges[k] }; });
+    save({ ...data, schedule: sched, proposals: [...data.proposals, proposal] });
+    setEdits({});
+  };
+
+  const activeTheme = page === "theme" ? tempTheme : theme;
+  if (loading) return <div className="flex items-center justify-center h-screen text-slate-500 font-medium">Loading Julia's Schedule...</div>;
+
+  if (page === "theme") {
+    return <ThemeEditor theme={tempTheme} onChange={setTempTheme} onSave={() => { save(data, tempTheme); setPage("main"); }} onCancel={() => { setTempTheme(theme); setPage("main"); }} />;
+  }
+
+  if (!user) {
+    const loginColors = activeTheme;
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl shadow-slate-200/50 p-8 border border-slate-100">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200"><Calendar className="text-white w-8 h-8" /></div>
+            <h1 className="text-2xl font-bold text-slate-900">Julia's Schedule</h1>
+            <p className="text-slate-500 mt-2">Co-parenting made simpler</p>
+          </div>
+          <div className="space-y-3">
+            {["collin", "tiia"].map((u) => (
+              <button key={u} onClick={() => setUser(u as any)} className="w-full flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all group">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm" style={{ backgroundColor: loginColors[u as "collin" | "tiia"].bg, color: loginColors[u as "collin" | "tiia"].text }}>{u[0].toUpperCase()}</div>
+                <span className="font-semibold text-slate-700 capitalize">{u}</span>
+                <ChevronRight className="ml-auto w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const pendingIncoming = data?.proposals?.filter((p: any) => p.status === "pending" && p.from !== user) || [];
+  const pendingOutgoing = data?.proposals?.filter((p: any) => p.status === "pending" && p.from === user) || [];
+
+  if (page === "history") {
+    return (
+      <div className="max-w-2xl mx-auto p-4 sm:p-6 min-h-screen bg-slate-50">
+        <div className="flex items-center gap-4 mb-8">
+          <button onClick={() => setPage("main")} className="p-2 hover:bg-white rounded-lg border border-transparent hover:border-slate-200 transition-all"><ChevronLeft className="w-6 h-6 text-slate-600" /></button>
+          <h2 className="text-2xl font-bold text-slate-900">Proposal History</h2>
+        </div>
+        <div className="space-y-4">
+          {data.proposals.slice().sort((a: any, b: any) => new Date(b.created).getTime() - new Date(a.created).getTime()).map((p: any) => (
+            <div key={p.id} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <div className="flex justify-between items-start mb-3">
+                <div className="flex items-center gap-3"><StatusBadge status={p.status} /><span className="font-semibold text-slate-800 capitalize">{p.from}</span></div>
+                <span className="text-xs text-slate-400">{new Date(p.created).toLocaleDateString()}</span>
+              </div>
+              <div className="space-y-1">
+                {p.changes.map((c: any) => (
+                  <div key={c.date} className="text-sm text-slate-600 flex items-center gap-2">
+                    <span className="font-medium min-w-[80px]">{fmtDay(new Date(c.date))}</span>
+                    <Pill who={c.was.night} theme={activeTheme} small />
+                    <ChevronRight className="w-3 h-3 text-slate-300" />
+                    <Pill who={c.to.night} theme={activeTheme} small />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto p-4 sm:p-6 min-h-screen bg-slate-50">
+      <header className="flex items-center justify-between mb-8 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-100"><Calendar className="text-white w-5 h-5" /></div>
+          <div><h1 className="font-bold text-slate-900">Julia's Schedule</h1><p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Co-Parenting Dashboard</p></div>
+        </div>
+        <div className="flex items-center gap-3">
+          <button onClick={() => { setTempTheme(theme); setPage("theme"); }} className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Theme Editor"><div className="w-5 h-5 rounded-full border-2 border-slate-400 flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-slate-400" /></div></button>
+          <button onClick={() => setPage("history")} className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="History"><HistoryIcon className="w-5 h-5" /></button>
+          <button onClick={() => setUser(null)} className="flex items-center gap-2 pl-2 pr-3 py-1.5 bg-slate-50 hover:bg-slate-100 rounded-full border border-slate-200 transition-all group"><div className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px]" style={{ backgroundColor: activeTheme[user].bg, color: activeTheme[user].text }}>{user[0].toUpperCase()}</div><LogOut className="w-4 h-4 text-slate-400 group-hover:text-slate-600" /></button>
+        </div>
+      </header>
+
+      <div className="flex gap-16 mb-4 px-2 text-[11px] text-slate-400 font-bold uppercase tracking-wider items-center">
+        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: activeTheme.collin.primary }} /> Collin</span>
+        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: activeTheme.tiia.primary }} /> Tiia</span>
+        {pendingIncoming.length > 0 && <span className="ml-auto text-amber-500">{pendingIncoming.length} to review</span>}
+      </div>
+
+      <section className="mb-8">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="grid grid-cols-7 border-b border-slate-400">{DAYS_HDR.map((d) => <div key={d} className="py-3 text-center text-[11px] font-bold text-slate-500 uppercase tracking-widest border-r border-slate-400 last:border-r-0">{d}</div>)}</div>
+          <div className="grid grid-cols-7">
+            {allDays.map((d) => {
+              const k = fmt(d);
+              const entry = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
+              const isToday = k === TODAY;
+              const evts = (EVENTS[k] || []).filter((e) => !e.w || e.w === user || e.w === "both");
+              const nightColor = activeTheme[entry.night as "collin" | "tiia"];
+              return (
+                <div key={k} className={`relative aspect-square border-r border-b border-slate-400 last:border-r-0 transition-colors ${isToday ? "ring-2 ring-inset ring-blue-500 z-10" : ""}`} style={{ backgroundColor: nightColor.bg }}>
+                  <div className="absolute inset-0 p-2 flex flex-col">
+                    <div className="flex justify-between items-start mb-1"><span className={`text-sm font-bold ${isToday ? "text-blue-600" : "text-slate-700"}`}>{d.getDate()}</span></div>
+                    <div className="mt-auto px-1.5 py-0.5 text-[10px] font-black uppercase tracking-widest truncate bg-white/30 rounded shadow-sm" style={{ color: nightColor.text }}>{entry.night}</div>
+                    {entry.daycare && <div className="mt-0.5 text-[8px] font-bold text-slate-500/70 uppercase tracking-tighter">Daycare</div>}
+                    <div className="mt-1 space-y-0.5 overflow-hidden">{evts.slice(0, 2).map((ev, idx) => <div key={idx} className="text-[8px] text-slate-600/80 truncate leading-tight font-medium">- {ev.t}</div>)}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Schedule Detail</h3>
+          <div className="flex gap-2">
+            {Object.keys(edits).length > 0 && <button onClick={() => setEdits({})} className="text-[11px] font-bold text-blue-600 hover:text-blue-700 mr-2">Discard Edits</button>}
+            <div className="flex items-center bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+              <button onClick={() => setRangeStart((prev) => addD(prev, -7))} className="p-2 hover:bg-slate-50 text-slate-600 transition-all border-r border-slate-100" title="Add Previous Week"><Plus className="w-3 h-3" /></button>
+              {canRemovePrev && <button onClick={() => setRangeStart((prev) => addD(prev, 7))} className="p-2 hover:bg-rose-50 text-rose-500 transition-all" title="Remove Previous Week"><Minus className="w-3 h-3" /></button>}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-4">
+          {allDays.map((d) => {
+            const k = fmt(d);
+            const original = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
+            const current = edits[k] || original;
+            const isChanged = JSON.stringify(original) !== JSON.stringify(current);
+            const isToday = k === TODAY;
+            const nightColor = activeTheme[current.night as "collin" | "tiia"];
+            const isNoteOpen = noteOpen === k;
+            return (
+              <div key={k} className={`border-b border-slate-100 last:border-0 transition-colors ${isChanged ? "bg-amber-50/40" : ""}`} style={!isChanged ? { backgroundColor: nightColor.bg } : {}}>
+                <div className="p-4 grid grid-cols-[1fr_auto] sm:grid-cols-[1.5fr_auto_auto_auto_auto] items-center gap-x-4 gap-y-3">
+                  <div className="min-w-0"><div className="flex items-center gap-2"><span className={`font-bold text-sm ${isToday ? "text-blue-600" : "text-slate-800"}`}>{fmtDay(d)}</span></div></div>
+                  <div className="flex justify-end sm:justify-center w-[80px]"><NightToggle value={current.night} theme={activeTheme} onChange={(v) => setEdits((prev) => ({ ...prev, [k]: { ...current, night: v } }))} /></div>
+                  <div className="flex justify-start sm:justify-center w-[90px]"><DaycareToggle on={current.daycare} theme={activeTheme} onToggle={() => setEdits((prev) => ({ ...prev, [k]: { ...current, daycare: !current.daycare } }))} /></div>
+                  <div className="flex justify-start sm:justify-center w-[100px]">
+                    {!current.daycare ? (
+                      <select value={current.pickup} onChange={(e) => setEdits((prev) => ({ ...prev, [k]: { ...current, pickup: e.target.value } }))} className="text-[11px] font-medium bg-white border border-slate-200 rounded-lg px-2 py-1 outline-none focus:border-blue-400 w-full">{TIMES.map((t) => <option key={t} value={t}>{t}</option>)}</select>
+                    ) : <div className="text-[10px] text-slate-400 italic px-2">No pickup</div>}
+                  </div>
+                  <div className="flex items-center justify-end gap-2 w-[70px]">
+                    <button onClick={() => setNoteOpen(isNoteOpen ? null : k)} className={`p-2 rounded-lg transition-all ${current.note || isNoteOpen ? "bg-blue-50 text-blue-600" : "text-slate-300 hover:text-slate-500 hover:bg-slate-50"}`}><StickyNote className="w-4 h-4" /></button>
+                    <div className="w-8 h-8 flex items-center justify-center">{isChanged && <button onClick={() => { const next = { ...edits }; delete next[k]; setEdits(next); }} className="p-2 text-amber-500 hover:bg-amber-50 rounded-lg transition-all" title="Undo changes"><Undo2 className="w-4 h-4" /></button>}</div>
+                  </div>
+                </div>
+                <AnimatePresence>{isNoteOpen && <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden"><div className="px-4 pb-4"><textarea value={current.note || ""} onChange={(e) => setEdits((prev) => ({ ...prev, [k]: { ...current, note: e.target.value } }))} placeholder="Add a note for this day..." className="w-full text-xs p-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-blue-400 min-h-[60px] resize-none" /></div></motion.div>}</AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex justify-center gap-3"><div className="flex items-center bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"><button onClick={() => setRangeWeeks((prev) => prev + 1)} className="flex items-center gap-2 px-6 py-2 hover:bg-slate-50 text-[12px] font-bold text-slate-600 transition-all border-r border-slate-100"><Plus className="w-4 h-4" /> Next Week</button>{canRemoveNext && <button onClick={() => setRangeWeeks((prev) => prev - 1)} className="px-4 py-2 hover:bg-rose-50 text-rose-500 transition-all" title="Remove Next Week"><Minus className="w-4 h-4" /></button>}</div></div>
+      </section>
+
+      <AnimatePresence>
+        {Object.keys(edits).length > 0 && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mb-8 overflow-hidden">
+            <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-xl flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3"><div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center"><Plus className="w-6 h-6" /></div><div><p className="font-bold text-base">{Object.keys(edits).length} Change{Object.keys(edits).length > 1 ? "s" : ""}</p></div></div>
+                <button onClick={() => {
+                  const changes = Object.keys(edits).map((k) => {
+                    const original = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
+                    return { date: k, was: { night: original.night, pickup: original.pickup, daycare: original.daycare }, to: { night: edits[k].night, pickup: edits[k].pickup, daycare: edits[k].daycare } };
+                  });
+                  const noteChanges: Record<string, string> = {};
+                  Object.keys(edits).forEach((k) => { const originalNote = data.schedule[k]?.note || ""; if (edits[k].note !== originalNote) noteChanges[k] = edits[k].note; });
+                  handleProposal({ id: uid(), from: user, created: new Date().toISOString(), changes, note: "", status: "pending", response: "", respondedBy: null, respondedAt: null }, noteChanges);
+                }} className="px-8 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-500/20">Send Proposal</button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {(pendingIncoming.length > 0 || pendingOutgoing.length > 0) && (
+        <section className="mb-12 space-y-3">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Active Proposals</h3>
+          {pendingIncoming.map((p: any) => <ProposalCard key={p.id} p={p} type="in" theme={activeTheme} onRespond={handleRespond} />)}
+          {pendingOutgoing.map((p: any) => <ProposalCard key={p.id} p={p} type="out" theme={activeTheme} />)}
+        </section>
+      )}
+    </div>
+  );
+}
+
+function ProposalCard({ p, type, theme, onRespond }: { p: any; type: "in" | "out"; theme: any; onRespond?: (id: string, status: string, resp: string) => void }) {
+  const [open, setOpen] = useState(type === "in");
+  const [reply, setReply] = useState("");
+  const otherUser = p.from === "collin" ? "Collin" : "Tiia";
+  return (
+    <div className={`rounded-2xl border transition-all ${type === "in" ? "bg-amber-50 border-amber-200 shadow-sm" : "bg-white border-slate-200"}`}>
+      <button onClick={() => setOpen(!open)} className="w-full p-4 flex items-center justify-between text-left">
+        <div className="flex items-center gap-3">
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${type === "in" ? "bg-amber-200 text-amber-700" : "bg-slate-100 text-slate-500"}`}>{type === "in" ? <AlertCircle className="w-5 h-5" /> : <Clock className="w-5 h-5" />}</div>
+          <div><p className="font-bold text-sm text-slate-900">{type === "in" ? `Proposal from ${otherUser}` : `Sent to ${p.from === "collin" ? "Tiia" : "Collin"}`}</p><p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">{p.changes.length} Change{p.changes.length > 1 ? "s" : ""}</p></div>
+        </div>
+        <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${open ? "rotate-90" : ""}`} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+            <div className="px-4 pb-4 space-y-3">
+              <div className="space-y-2">{p.changes.map((c: any) => <div key={c.date} className="flex items-center gap-3 text-xs bg-white/40 p-2 rounded-lg"><span className="font-bold text-slate-500 min-w-[80px]">{fmtDay(new Date(c.date))}</span><div className="flex items-center gap-2"><Pill who={c.was?.night || "collin"} theme={theme} small /><ChevronRight className="w-3 h-3 text-slate-300" /><Pill who={c.to?.night || "collin"} theme={theme} small /></div></div>)}</div>
+              {type === "in" && onRespond && (
+                <div className="pt-3 border-t border-amber-200/50 space-y-3">
+                  <textarea value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Add a reply..." className="w-full text-xs p-3 bg-white border border-amber-200 rounded-xl outline-none focus:border-amber-400 min-h-[60px] resize-none" />
+                  <div className="flex gap-2">
+                    <button onClick={() => onRespond(p.id, "accepted", reply)} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs transition-all"><CheckCircle2 className="w-4 h-4" /> Accept</button>
+                    <button onClick={() => onRespond(p.id, "declined", reply)} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-xs transition-all"><XCircle className="w-4 h-4" /> Decline</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
