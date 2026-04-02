@@ -21,6 +21,7 @@ import {
   StickyNote,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { loadInitialData, persistData } from "./lib/persistence";
 
 const DAYS_HDR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const TIMES = ["None"];
@@ -225,33 +226,33 @@ export default function App() {
   const canRemoveNext = (rangeStart.getTime() + (rangeWeeks - 1) * 7 * 24 * 60 * 60 * 1000) > initialStart.getTime();
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
+    let mounted = true;
+    (async () => {
+      try {
+        const parsed = await loadInitialData(STORE_KEY, seedData);
+        if (!mounted) return;
         setData(parsed);
-        if (parsed.theme) {
-          setTheme(parsed.theme);
-          setTempTheme(parsed.theme);
+        if ((parsed as any)?.theme) {
+          setTheme((parsed as any).theme);
+          setTempTheme((parsed as any).theme);
         }
-      } else {
-        const d = seedData();
-        setData(d);
-        localStorage.setItem(STORE_KEY, JSON.stringify(d));
+      } catch (e) {
+        console.error("Failed to load data:", e);
+        if (mounted) setData(seedData());
+      } finally {
+        if (mounted) setLoading(false);
       }
-    } catch (e) {
-      console.error("Failed to load data:", e);
-      setData(seedData());
-    } finally {
-      setLoading(false);
-    }
+    })();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const save = useCallback((nd: any, nt?: any) => {
     const payload = { ...nd, theme: nt || theme };
     setData(nd);
     if (nt) setTheme(nt);
-    localStorage.setItem(STORE_KEY, JSON.stringify(payload));
+    void persistData(STORE_KEY, payload);
   }, [theme]);
 
   const handleRespond = (id: string, status: string, response: string) => {
