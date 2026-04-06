@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { loadInitialData, persistData } from "./lib/persistence";
+import { supabase } from "./lib/supabase";
 
 const DAYS_HDR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const TIMES = ["None"];
@@ -37,7 +38,6 @@ const DEFAULT_THEME = {
   tiia: { primary: "#60a5fa", bg: "#eff6ff", text: "#1e3a8a", border: "#bfdbfe" },
 };
 
-const TODAY = "2026-04-02";
 const EVENTS: Record<string, { t: string; tm: string; w?: string }[]> = {
   "2026-03-30": [{ t: "Julia swim class", tm: "4:00 PM" }],
   "2026-04-01": [{ t: "Team standup", tm: "9:00 AM", w: "collin" }],
@@ -77,6 +77,11 @@ function weekStart(d: Date) {
   r.setDate(r.getDate() - dow(r));
   return r;
 }
+function todayAtNoon() {
+  const d = new Date();
+  d.setHours(12, 0, 0, 0);
+  return d;
+}
 
 function initSchedule() {
   const s: Record<string, any> = {};
@@ -98,37 +103,21 @@ function initSchedule() {
 function seedData() {
   return {
     schedule: initSchedule(),
-    proposals: [
-      {
-        id: "d1",
-        from: "tiia",
-        created: "2026-03-24T14:15:00Z",
-        changes: [
-          { date: "2026-03-28", was: { night: "collin", pickup: "10:00 AM", daycare: false }, to: { night: "tiia", pickup: "10:00 AM", daycare: false } },
-          { date: "2026-03-29", was: { night: "tiia", pickup: "10:00 AM", daycare: false }, to: { night: "collin", pickup: "10:00 AM", daycare: false } },
-        ],
-        note: "Julia's swimming comp Sunday morning",
-        status: "accepted",
-        response: "Makes sense",
-        respondedBy: "collin",
-        respondedAt: "2026-03-24T16:00:00Z",
-      },
-      {
-        id: "d2",
-        from: "collin",
-        created: "2026-03-18T09:00:00Z",
-        changes: [{ date: "2026-03-19", was: { night: "tiia", pickup: "5:30 PM", daycare: true }, to: { night: "tiia", pickup: "6:00 PM", daycare: true } }],
-        note: "Running late from work",
-        status: "accepted",
-        response: "",
-        respondedBy: "tiia",
-        respondedAt: "2026-03-18T10:30:00Z",
-      },
-    ],
+    proposals: [],
   };
 }
 
 const STORE_KEY = "coparent-v5";
+const COLLIN_EMAIL = (import.meta.env.VITE_COLLIN_EMAIL as string | undefined)?.toLowerCase();
+const TIIA_EMAIL = (import.meta.env.VITE_TIIA_EMAIL as string | undefined)?.toLowerCase();
+
+function resolveUserFromEmail(email?: string | null): "collin" | "tiia" | null {
+  const normalized = email?.toLowerCase();
+  if (!normalized) return null;
+  if (COLLIN_EMAIL && normalized === COLLIN_EMAIL) return "collin";
+  if (TIIA_EMAIL && normalized === TIIA_EMAIL) return "tiia";
+  return null;
+}
 
 function Pill({ who, theme, small }: { who: "collin" | "tiia"; theme: any; small?: boolean }) {
   const config = theme[who];
@@ -140,7 +129,12 @@ function Pill({ who, theme, small }: { who: "collin" | "tiia"; theme: any; small
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = { accepted: "bg-emerald-100 text-emerald-700", declined: "bg-rose-100 text-rose-700", pending: "bg-amber-100 text-amber-700" };
+  const styles: Record<string, string> = {
+    accepted: "bg-emerald-100 text-emerald-700",
+    declined: "bg-rose-100 text-rose-700",
+    pending: "bg-amber-100 text-amber-700",
+    forced: "bg-red-100 text-red-700",
+  };
   return <span className={`text-[10px] px-2 py-0.5 rounded font-semibold uppercase tracking-wider ${styles[status] || styles.pending}`}>{status}</span>;
 }
 
@@ -208,6 +202,12 @@ function ThemeEditor({ theme, onChange, onSave, onCancel }: { theme: any; onChan
 
 export default function App() {
   const [user, setUser] = useState<"collin" | "tiia" | null>(null);
+  const [authEmail, setAuthEmail] = useState<string | null>(null);
+  const [authReady, setAuthReady] = useState(!supabase);
+  const [emailInput, setEmailInput] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [authBusy, setAuthBusy] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [page, setPage] = useState<"main" | "history" | "theme">("main");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -216,8 +216,46 @@ export default function App() {
   const [theme, setTheme] = useState(DEFAULT_THEME);
   const [tempTheme, setTempTheme] = useState(DEFAULT_THEME);
 
-  const initialStart = useMemo(() => weekStart(new Date(TODAY + "T12:00:00")), []);
-  const initialWeeks = useMemo(() => (dow(new Date(TODAY + "T12:00:00")) < 4 ? 2 : 3), []);
+  const [todayKey, setTodayKey] = useState(() => fmt(todayAtNoon()));
+  const [todayDate, setTodayDate] = useState(() => todayAtNoon());
+
+  useEffect(() => {
+    const refresh = () => {
+      const next = todayAtNoon();
+      setTodayDate(next);
+      setTodayKey(fmt(next));
+    };
+    refresh();
+    const interval = window.setInterval(refresh, 60 * 1000);
+    return () => window.clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (!supabase) return;
+    let mounted = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
+      const email = data.session?.user?.email ?? null;
+      setAuthEmail(email);
+      setUser(resolveUserFromEmail(email));
+      setAuthReady(true);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      const email = session?.user?.email ?? null;
+      setAuthEmail(email);
+      setUser(resolveUserFromEmail(email));
+      setAuthReady(true);
+    });
+
+    return () => {
+      mounted = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const initialStart = useMemo(() => weekStart(todayDate), [todayDate]);
+  const initialWeeks = useMemo(() => (dow(todayDate) < 4 ? 2 : 3), [todayDate]);
   const [rangeStart, setRangeStart] = useState(initialStart);
   const [rangeWeeks, setRangeWeeks] = useState(initialWeeks);
   const allDays = useMemo(() => Array.from({ length: rangeWeeks * 7 }, (_, i) => addD(rangeStart, i)), [rangeStart, rangeWeeks]);
@@ -255,6 +293,54 @@ export default function App() {
     void persistData(STORE_KEY, payload);
   }, [theme]);
 
+  const signInWithEmail = useCallback(async () => {
+    if (!supabase) return;
+    if (!emailInput || !passwordInput) {
+      setAuthError("Enter email and password.");
+      return;
+    }
+    setAuthBusy(true);
+    setAuthError(null);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: emailInput.trim(),
+      password: passwordInput,
+    });
+    if (error) setAuthError(error.message);
+    setAuthBusy(false);
+  }, [emailInput, passwordInput]);
+
+  const signUpWithEmail = useCallback(async () => {
+    if (!supabase) return;
+    if (!emailInput || !passwordInput) {
+      setAuthError("Enter email and password.");
+      return;
+    }
+    setAuthBusy(true);
+    setAuthError(null);
+    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+    const { error } = await supabase.auth.signUp({
+      email: emailInput.trim(),
+      password: passwordInput,
+      options: { emailRedirectTo: redirectTo },
+    });
+    if (error) {
+      setAuthError(error.message);
+    } else {
+      setAuthError("Account created. Check your email confirmation if required, then sign in.");
+    }
+    setAuthBusy(false);
+  }, [emailInput, passwordInput]);
+
+  const handleLogout = useCallback(async () => {
+    if (supabase) {
+      await supabase.auth.signOut();
+      setAuthEmail(null);
+      setEmailInput("");
+      setPasswordInput("");
+    }
+    setUser(null);
+  }, []);
+
   const handleRespond = (id: string, status: string, response: string) => {
     if (!data || !user) return;
     const props = data.proposals.map((p: any) => (p.id !== id ? p : { ...p, status, response, respondedBy: user, respondedAt: new Date().toISOString() }));
@@ -274,8 +360,78 @@ export default function App() {
     setEdits({});
   };
 
+  const collectProposalChanges = useCallback(() => {
+    if (!data) return null;
+    const changes = Object.keys(edits).map((k) => {
+      const original = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
+      return {
+        date: k,
+        was: { night: original.night, pickup: original.pickup, daycare: original.daycare },
+        to: { night: edits[k].night, pickup: edits[k].pickup, daycare: edits[k].daycare },
+      };
+    });
+    const noteChanges: Record<string, string> = {};
+    Object.keys(edits).forEach((k) => {
+      const originalNote = data.schedule[k]?.note || "";
+      if (edits[k].note !== originalNote) noteChanges[k] = edits[k].note;
+    });
+    return { changes, noteChanges };
+  }, [data, edits]);
+
+  const handleSendProposal = useCallback(() => {
+    if (!user) return;
+    const payload = collectProposalChanges();
+    if (!payload) return;
+    handleProposal({
+      id: uid(),
+      from: user,
+      created: new Date().toISOString(),
+      changes: payload.changes,
+      note: "",
+      status: "pending",
+      response: "",
+      respondedBy: null,
+      respondedAt: null,
+    }, payload.noteChanges);
+  }, [collectProposalChanges, user]);
+
+  const handleForceProposal = useCallback(() => {
+    if (!data || !user) return;
+    const payload = collectProposalChanges();
+    if (!payload) return;
+    const now = new Date().toISOString();
+    const sched = { ...data.schedule };
+    payload.changes.forEach((c: any) => {
+      sched[c.date] = { ...sched[c.date], night: c.to.night, pickup: c.to.pickup, daycare: c.to.daycare };
+    });
+    Object.keys(payload.noteChanges).forEach((k) => {
+      sched[k] = { ...sched[k], note: payload.noteChanges[k] };
+    });
+    save({
+      ...data,
+      schedule: sched,
+      proposals: [
+        ...data.proposals,
+        {
+          id: uid(),
+          from: user,
+          created: now,
+          changes: payload.changes,
+          note: "",
+          status: "forced",
+          response: "Force proposal applied immediately",
+          respondedBy: user,
+          respondedAt: now,
+          forcedBy: user,
+          forcedAt: now,
+        },
+      ],
+    });
+    setEdits({});
+  }, [collectProposalChanges, data, save, user]);
+
   const activeTheme = page === "theme" ? tempTheme : theme;
-  if (loading) return <div className="flex items-center justify-center h-screen text-slate-500 font-medium">Loading Julia's Schedule...</div>;
+  if (loading || !authReady) return <div className="flex items-center justify-center h-screen text-slate-500 font-medium">Loading Julia's Schedule...</div>;
 
   if (page === "theme") {
     return <ThemeEditor theme={tempTheme} onChange={setTempTheme} onSave={() => { save(data, tempTheme); setPage("main"); }} onCancel={() => { setTempTheme(theme); setPage("main"); }} />;
@@ -291,15 +447,57 @@ export default function App() {
             <h1 className="text-2xl font-bold text-slate-900">Julia's Schedule</h1>
             <p className="text-slate-500 mt-2">Co-parenting made simpler</p>
           </div>
-          <div className="space-y-3">
-            {["collin", "tiia"].map((u) => (
-              <button key={u} onClick={() => setUser(u as any)} className="w-full flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all group">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm" style={{ backgroundColor: loginColors[u as "collin" | "tiia"].bg, color: loginColors[u as "collin" | "tiia"].text }}>{u[0].toUpperCase()}</div>
-                <span className="font-semibold text-slate-700 capitalize">{u}</span>
-                <ChevronRight className="ml-auto w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors" />
+          {supabase ? (
+            <div className="space-y-3">
+              <input
+                type="email"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                placeholder="Email"
+                className="w-full p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-400"
+              />
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="Password"
+                className="w-full p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-400"
+              />
+              <button
+                disabled={authBusy}
+                onClick={signInWithEmail}
+                className="w-full p-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white transition-all font-semibold"
+              >
+                Sign In
               </button>
-            ))}
-          </div>
+              <button
+                disabled={authBusy}
+                onClick={signUpWithEmail}
+                className="w-full p-3 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all font-semibold text-slate-700 disabled:opacity-60"
+              >
+                Create Account
+              </button>
+              {authError && (
+                <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg p-2">{authError}</p>
+              )}
+              {authEmail && !resolveUserFromEmail(authEmail) && (
+                <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg p-2">
+                  Signed in as {authEmail}, but it is not mapped to Collin or Tiia. Set `VITE_COLLIN_EMAIL` and
+                  `VITE_TIIA_EMAIL` in your env.
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {["collin", "tiia"].map((u) => (
+                <button key={u} onClick={() => setUser(u as any)} className="w-full flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all group">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm" style={{ backgroundColor: loginColors[u as "collin" | "tiia"].bg, color: loginColors[u as "collin" | "tiia"].text }}>{u[0].toUpperCase()}</div>
+                  <span className="font-semibold text-slate-700 capitalize">{u}</span>
+                  <ChevronRight className="ml-auto w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -332,6 +530,11 @@ export default function App() {
                   </div>
                 ))}
               </div>
+              {p.status === "forced" && (
+                <p className="mt-2 text-xs text-red-700 font-semibold bg-red-50 border border-red-100 rounded-lg px-2 py-1">
+                  Forced by {p.forcedBy || p.respondedBy || p.from} at {new Date(p.forcedAt || p.respondedAt || p.created).toLocaleString()}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -349,7 +552,7 @@ export default function App() {
         <div className="flex items-center gap-3">
           <button onClick={() => { setTempTheme(theme); setPage("theme"); }} className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Theme Editor"><div className="w-5 h-5 rounded-full border-2 border-slate-400 flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-slate-400" /></div></button>
           <button onClick={() => setPage("history")} className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="History"><HistoryIcon className="w-5 h-5" /></button>
-          <button onClick={() => setUser(null)} className="flex items-center gap-2 pl-2 pr-3 py-1.5 bg-slate-50 hover:bg-slate-100 rounded-full border border-slate-200 transition-all group"><div className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px]" style={{ backgroundColor: activeTheme[user].bg, color: activeTheme[user].text }}>{user[0].toUpperCase()}</div><LogOut className="w-4 h-4 text-slate-400 group-hover:text-slate-600" /></button>
+          <button onClick={handleLogout} className="flex items-center gap-2 pl-2 pr-3 py-1.5 bg-slate-50 hover:bg-slate-100 rounded-full border border-slate-200 transition-all group"><div className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px]" style={{ backgroundColor: activeTheme[user].bg, color: activeTheme[user].text }}>{user[0].toUpperCase()}</div><LogOut className="w-4 h-4 text-slate-400 group-hover:text-slate-600" /></button>
         </div>
       </header>
 
@@ -366,7 +569,7 @@ export default function App() {
             {allDays.map((d) => {
               const k = fmt(d);
               const entry = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
-              const isToday = k === TODAY;
+              const isToday = k === todayKey;
               const evts = (EVENTS[k] || []).filter((e) => !e.w || e.w === user || e.w === "both");
               const nightColor = activeTheme[entry.night as "collin" | "tiia"];
               return (
@@ -402,7 +605,7 @@ export default function App() {
             const original = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
             const current = edits[k] || original;
             const isChanged = JSON.stringify(original) !== JSON.stringify(current);
-            const isToday = k === TODAY;
+            const isToday = k === todayKey;
             const nightColor = activeTheme[current.night as "collin" | "tiia"];
             const isNoteOpen = noteOpen === k;
             return (
@@ -436,15 +639,10 @@ export default function App() {
             <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-xl flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3"><div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center"><Plus className="w-6 h-6" /></div><div><p className="font-bold text-base">{Object.keys(edits).length} Change{Object.keys(edits).length > 1 ? "s" : ""}</p></div></div>
-                <button onClick={() => {
-                  const changes = Object.keys(edits).map((k) => {
-                    const original = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
-                    return { date: k, was: { night: original.night, pickup: original.pickup, daycare: original.daycare }, to: { night: edits[k].night, pickup: edits[k].pickup, daycare: edits[k].daycare } };
-                  });
-                  const noteChanges: Record<string, string> = {};
-                  Object.keys(edits).forEach((k) => { const originalNote = data.schedule[k]?.note || ""; if (edits[k].note !== originalNote) noteChanges[k] = edits[k].note; });
-                  handleProposal({ id: uid(), from: user, created: new Date().toISOString(), changes, note: "", status: "pending", response: "", respondedBy: null, respondedAt: null }, noteChanges);
-                }} className="px-8 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-500/20">Send Proposal</button>
+                <div className="flex items-center gap-2">
+                  <button onClick={handleSendProposal} className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-500/20">Send Proposal</button>
+                  <button onClick={handleForceProposal} className="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-red-500/20">Force Proposal</button>
+                </div>
               </div>
             </div>
           </motion.div>
