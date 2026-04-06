@@ -110,6 +110,10 @@ function seedData() {
 const STORE_KEY = "coparent-v5";
 const COLLIN_EMAIL = (import.meta.env.VITE_COLLIN_EMAIL as string | undefined)?.toLowerCase();
 const TIIA_EMAIL = (import.meta.env.VITE_TIIA_EMAIL as string | undefined)?.toLowerCase();
+const AUTH_REDIRECT_URL = (import.meta.env.VITE_AUTH_REDIRECT_URL as string | undefined)?.trim();
+const APP_VERSION = __APP_VERSION__;
+const BUILD_ID = __BUILD_ID__;
+const GIT_SHA = __GIT_SHA__;
 
 function resolveUserFromEmail(email?: string | null): "collin" | "tiia" | null {
   const normalized = email?.toLowerCase();
@@ -117,6 +121,11 @@ function resolveUserFromEmail(email?: string | null): "collin" | "tiia" | null {
   if (COLLIN_EMAIL && normalized === COLLIN_EMAIL) return "collin";
   if (TIIA_EMAIL && normalized === TIIA_EMAIL) return "tiia";
   return null;
+}
+
+function getAuthRedirectUrl() {
+  if (AUTH_REDIRECT_URL) return AUTH_REDIRECT_URL;
+  return `${window.location.origin}${window.location.pathname}`;
 }
 
 function Pill({ who, theme, small }: { who: "collin" | "tiia"; theme: any; small?: boolean }) {
@@ -208,6 +217,7 @@ export default function App() {
   const [passwordInput, setPasswordInput] = useState("");
   const [authBusy, setAuthBusy] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [showResetOption, setShowResetOption] = useState(false);
   const [page, setPage] = useState<"main" | "history" | "theme">("main");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -215,6 +225,17 @@ export default function App() {
   const [noteOpen, setNoteOpen] = useState<string | null>(null);
   const [theme, setTheme] = useState(DEFAULT_THEME);
   const [tempTheme, setTempTheme] = useState(DEFAULT_THEME);
+  const buildLabel = useMemo(() => {
+    const d = new Date(__BUILD_TIME_ISO__);
+    if (isNaN(d.getTime())) return __BUILD_TIME_ISO__;
+    return d.toLocaleString("en-GB", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }, []);
 
   const [todayKey, setTodayKey] = useState(() => fmt(todayAtNoon()));
   const [todayDate, setTodayDate] = useState(() => todayAtNoon());
@@ -301,11 +322,15 @@ export default function App() {
     }
     setAuthBusy(true);
     setAuthError(null);
+    setShowResetOption(false);
     const { error } = await supabase.auth.signInWithPassword({
       email: emailInput.trim(),
       password: passwordInput,
     });
-    if (error) setAuthError(error.message);
+    if (error) {
+      setAuthError(error.message);
+      setShowResetOption(error.message.toLowerCase().includes("invalid login"));
+    }
     setAuthBusy(false);
   }, [emailInput, passwordInput]);
 
@@ -317,19 +342,49 @@ export default function App() {
     }
     setAuthBusy(true);
     setAuthError(null);
-    const redirectTo = `${window.location.origin}${window.location.pathname}`;
-    const { error } = await supabase.auth.signUp({
+    setShowResetOption(false);
+    const redirectTo = getAuthRedirectUrl();
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email: emailInput.trim(),
       password: passwordInput,
       options: { emailRedirectTo: redirectTo },
     });
     if (error) {
       setAuthError(error.message);
+      const msg = error.message.toLowerCase();
+      const accountExists = msg.includes("already") || msg.includes("exists") || msg.includes("registered");
+      setShowResetOption(accountExists);
     } else {
-      setAuthError("Account created. Check your email confirmation if required, then sign in.");
+      // Supabase can return no error for existing users; identities is usually empty in that case.
+      const identities = signUpData.user?.identities;
+      const looksLikeExistingUser = Array.isArray(identities) && identities.length === 0;
+      if (looksLikeExistingUser) {
+        setAuthError("Account already exists. Sign in or reset your password.");
+        setShowResetOption(true);
+      } else {
+        setAuthError("Account created. Check your email confirmation if required, then sign in.");
+      }
     }
     setAuthBusy(false);
   }, [emailInput, passwordInput]);
+
+  const sendPasswordReset = useCallback(async () => {
+    if (!supabase) return;
+    if (!emailInput) {
+      setAuthError("Enter your email first.");
+      return;
+    }
+    setAuthBusy(true);
+    const redirectTo = getAuthRedirectUrl();
+    const { error } = await supabase.auth.resetPasswordForEmail(emailInput.trim(), { redirectTo });
+    if (error) {
+      setAuthError(error.message);
+    } else {
+      setAuthError("Password reset email sent. Check your inbox.");
+      setShowResetOption(false);
+    }
+    setAuthBusy(false);
+  }, [emailInput]);
 
   const handleLogout = useCallback(async () => {
     if (supabase) {
@@ -480,6 +535,15 @@ export default function App() {
               {authError && (
                 <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg p-2">{authError}</p>
               )}
+              {showResetOption && (
+                <button
+                  disabled={authBusy}
+                  onClick={sendPasswordReset}
+                  className="w-full p-2.5 rounded-xl border border-amber-200 hover:bg-amber-50 text-amber-700 transition-all font-semibold text-sm disabled:opacity-60"
+                >
+                  Send Password Reset
+                </button>
+              )}
               {authEmail && !resolveUserFromEmail(authEmail) && (
                 <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg p-2">
                   Signed in as {authEmail}, but it is not mapped to Collin or Tiia. Set `VITE_COLLIN_EMAIL` and
@@ -498,6 +562,9 @@ export default function App() {
               ))}
             </div>
           )}
+          <p className="mt-4 text-[11px] text-slate-400 text-center">
+            v{APP_VERSION} • {buildLabel} • b{BUILD_ID} • {GIT_SHA}
+          </p>
         </div>
       </div>
     );
@@ -555,6 +622,7 @@ export default function App() {
           <button onClick={handleLogout} className="flex items-center gap-2 pl-2 pr-3 py-1.5 bg-slate-50 hover:bg-slate-100 rounded-full border border-slate-200 transition-all group"><div className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px]" style={{ backgroundColor: activeTheme[user].bg, color: activeTheme[user].text }}>{user[0].toUpperCase()}</div><LogOut className="w-4 h-4 text-slate-400 group-hover:text-slate-600" /></button>
         </div>
       </header>
+      <div className="text-right text-[11px] text-slate-400 -mt-5 mb-4">v{APP_VERSION} • {buildLabel} • b{BUILD_ID} • {GIT_SHA}</div>
 
       <div className="flex gap-16 mb-4 px-2 text-[11px] text-slate-400 font-bold uppercase tracking-wider items-center">
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: activeTheme.collin.primary }} /> Collin</span>
