@@ -128,6 +128,12 @@ function getAuthRedirectUrl() {
   return `${window.location.origin}${window.location.pathname}`;
 }
 
+function isRecoveryHash(hash: string) {
+  const raw = hash.startsWith("#") ? hash.slice(1) : hash;
+  const params = new URLSearchParams(raw);
+  return params.get("type") === "recovery";
+}
+
 function Pill({ who, theme, small }: { who: "collin" | "tiia"; theme: any; small?: boolean }) {
   const config = theme[who];
   return (
@@ -218,6 +224,10 @@ export default function App() {
   const [authBusy, setAuthBusy] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [showResetOption, setShowResetOption] = useState(false);
+  const [isRecoveryMode, setIsRecoveryMode] = useState(() => isRecoveryHash(window.location.hash));
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [recoveryMessage, setRecoveryMessage] = useState<string | null>(null);
   const [page, setPage] = useState<"main" | "history" | "theme">("main");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -262,10 +272,14 @@ export default function App() {
       setAuthReady(true);
     });
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       const email = session?.user?.email ?? null;
       setAuthEmail(email);
       setUser(resolveUserFromEmail(email));
+      if (event === "PASSWORD_RECOVERY") {
+        setIsRecoveryMode(true);
+        setRecoveryMessage(null);
+      }
       setAuthReady(true);
     });
 
@@ -273,6 +287,14 @@ export default function App() {
       mounted = false;
       authListener.subscription.unsubscribe();
     };
+  }, []);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      setIsRecoveryMode(isRecoveryHash(window.location.hash));
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
   const initialStart = useMemo(() => weekStart(todayDate), [todayDate]);
@@ -396,6 +418,33 @@ export default function App() {
     setUser(null);
   }, []);
 
+  const updatePasswordFromRecovery = useCallback(async () => {
+    if (!supabase) return;
+    if (!newPassword || newPassword.length < 8) {
+      setRecoveryMessage("Password must be at least 8 characters.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setRecoveryMessage("Passwords do not match.");
+      return;
+    }
+    setAuthBusy(true);
+    setRecoveryMessage(null);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      setRecoveryMessage(error.message);
+    } else {
+      setRecoveryMessage("Password updated successfully. You can continue.");
+      setIsRecoveryMode(false);
+      setNewPassword("");
+      setConfirmPassword("");
+      if (window.location.hash) {
+        window.history.replaceState({}, document.title, `${window.location.pathname}${window.location.search}`);
+      }
+    }
+    setAuthBusy(false);
+  }, [confirmPassword, newPassword]);
+
   const handleRespond = (id: string, status: string, response: string) => {
     if (!data || !user) return;
     const props = data.proposals.map((p: any) => (p.id !== id ? p : { ...p, status, response, respondedBy: user, respondedAt: new Date().toISOString() }));
@@ -487,6 +536,45 @@ export default function App() {
 
   const activeTheme = page === "theme" ? tempTheme : theme;
   if (loading || !authReady) return <div className="flex items-center justify-center h-screen text-slate-500 font-medium">Loading Julia's Schedule...</div>;
+
+  if (isRecoveryMode) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl shadow-slate-200/50 p-8 border border-slate-100">
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-bold text-slate-900">Set New Password</h1>
+            <p className="text-slate-500 mt-2 text-sm">You opened a recovery link. Set a new password to continue.</p>
+          </div>
+          <div className="space-y-3">
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="New password (min 8 chars)"
+              className="w-full p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-400"
+            />
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm new password"
+              className="w-full p-3 rounded-xl border border-slate-200 outline-none focus:border-blue-400"
+            />
+            <button
+              disabled={authBusy}
+              onClick={updatePasswordFromRecovery}
+              className="w-full p-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white transition-all font-semibold"
+            >
+              Update Password
+            </button>
+            {recoveryMessage && (
+              <p className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg p-2">{recoveryMessage}</p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (page === "theme") {
     return <ThemeEditor theme={tempTheme} onChange={setTempTheme} onSave={() => { save(data, tempTheme); setPage("main"); }} onCancel={() => { setTempTheme(theme); setPage("main"); }} />;
