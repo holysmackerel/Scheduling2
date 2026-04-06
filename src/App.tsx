@@ -18,7 +18,6 @@ import {
   Plus,
   Minus,
   Undo2,
-  StickyNote,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { loadInitialData, persistData } from "./lib/persistence";
@@ -232,7 +231,6 @@ export default function App() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [edits, setEdits] = useState<Record<string, any>>({});
-  const [noteOpen, setNoteOpen] = useState<string | null>(null);
   const [theme, setTheme] = useState(DEFAULT_THEME);
   const [tempTheme, setTempTheme] = useState(DEFAULT_THEME);
   const buildLabel = useMemo(() => {
@@ -463,6 +461,12 @@ export default function App() {
     save({ ...data, schedule: sched, proposals: [...data.proposals, proposal] });
     setEdits({});
   };
+
+  const handleRemoveProposal = useCallback((id: string) => {
+    if (!data) return;
+    const next = data.proposals.filter((p: any) => p.id !== id);
+    save({ ...data, proposals: next });
+  }, [data, save]);
 
   const collectProposalChanges = useCallback(() => {
     if (!data) return null;
@@ -724,17 +728,20 @@ export default function App() {
           <div className="grid grid-cols-7">
             {allDays.map((d) => {
               const k = fmt(d);
-              const entry = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
+              const entry = edits[k] || data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
               const isToday = k === todayKey;
-              const evts = (EVENTS[k] || []).filter((e) => !e.w || e.w === user || e.w === "both");
               const nightColor = activeTheme[entry.night as "collin" | "tiia"];
+              const notePreview = (entry.note || "").trim();
+              const pickupPreview = entry.daycare ? "" : `Pickup ${entry.pickup}`;
               return (
                 <div key={k} className={`relative aspect-square border-r border-b border-slate-400 last:border-r-0 transition-colors ${isToday ? "ring-2 ring-inset ring-blue-500 z-10" : ""}`} style={{ backgroundColor: nightColor.bg }}>
                   <div className="absolute inset-0 p-2 flex flex-col">
                     <div className="flex justify-between items-start mb-1"><span className={`text-sm font-bold ${isToday ? "text-blue-600" : "text-slate-700"}`}>{d.getDate()}</span></div>
-                    <div className="mt-auto px-1.5 py-0.5 text-[10px] font-black uppercase tracking-widest truncate bg-white/30 rounded shadow-sm" style={{ color: nightColor.text }}>{entry.night}</div>
-                    {entry.daycare && <div className="mt-0.5 text-[8px] font-bold text-slate-500/70 uppercase tracking-tighter">Daycare</div>}
-                    <div className="mt-1 space-y-0.5 overflow-hidden">{evts.slice(0, 2).map((ev, idx) => <div key={idx} className="text-[8px] text-slate-600/80 truncate leading-tight font-medium">- {ev.t}</div>)}</div>
+                    <div className="mt-auto" />
+                    <div className="mt-1 space-y-0.5 overflow-y-auto pr-0.5">
+                      {pickupPreview && <div className="text-[8px] text-slate-600/80 truncate leading-tight font-medium">{pickupPreview}</div>}
+                      {notePreview && <div className="text-[8px] text-blue-700/80 whitespace-pre-wrap break-words leading-tight font-medium">{notePreview}</div>}
+                    </div>
                   </div>
                 </div>
               );
@@ -763,24 +770,32 @@ export default function App() {
             const isChanged = JSON.stringify(original) !== JSON.stringify(current);
             const isToday = k === todayKey;
             const nightColor = activeTheme[current.night as "collin" | "tiia"];
-            const isNoteOpen = noteOpen === k;
             return (
               <div key={k} className={`border-b border-slate-100 last:border-0 transition-colors ${isChanged ? "bg-amber-50/40" : ""}`} style={!isChanged ? { backgroundColor: nightColor.bg } : {}}>
-                <div className="p-4 grid grid-cols-[1fr_auto] sm:grid-cols-[1.5fr_auto_auto_auto_auto] items-center gap-x-4 gap-y-3">
-                  <div className="min-w-0"><div className="flex items-center gap-2"><span className={`font-bold text-sm ${isToday ? "text-blue-600" : "text-slate-800"}`}>{fmtDay(d)}</span></div></div>
-                  <div className="flex justify-end sm:justify-center w-[80px]"><NightToggle value={current.night} theme={activeTheme} onChange={(v) => setEdits((prev) => ({ ...prev, [k]: { ...current, night: v } }))} /></div>
-                  <div className="flex justify-start sm:justify-center w-[90px]"><DaycareToggle on={current.daycare} theme={activeTheme} onToggle={() => setEdits((prev) => ({ ...prev, [k]: { ...current, daycare: !current.daycare } }))} /></div>
-                  <div className="flex justify-start sm:justify-center w-[100px]">
+                <div className="px-3 py-2 grid grid-cols-1 sm:grid-cols-[2.55fr_auto_120px_1.35fr_auto] items-start gap-x-3 gap-y-2">
+                  <div className="min-w-0 flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <span className={`font-bold text-[13px] ${isToday ? "text-blue-600" : "text-slate-800"}`}>{fmtDay(d)}</span>
+                    </div>
+                    <NightToggle value={current.night} theme={activeTheme} onChange={(v) => setEdits((prev) => ({ ...prev, [k]: { ...current, night: v } }))} />
+                  </div>
+                  <div className="flex justify-start sm:justify-center"><DaycareToggle on={current.daycare} theme={activeTheme} onToggle={() => setEdits((prev) => ({ ...prev, [k]: { ...current, daycare: !current.daycare } }))} /></div>
+                  <div className="flex justify-start sm:justify-center">
                     {!current.daycare ? (
-                      <select value={current.pickup} onChange={(e) => setEdits((prev) => ({ ...prev, [k]: { ...current, pickup: e.target.value } }))} className="text-[11px] font-medium bg-white border border-slate-200 rounded-lg px-2 py-1 outline-none focus:border-blue-400 w-full">{TIMES.map((t) => <option key={t} value={t}>{t}</option>)}</select>
-                    ) : <div className="text-[10px] text-slate-400 italic px-2">No pickup</div>}
+                      <select value={current.pickup} onChange={(e) => setEdits((prev) => ({ ...prev, [k]: { ...current, pickup: e.target.value } }))} className="text-[10px] font-medium bg-white border border-slate-200 rounded-lg px-2 py-0.5 outline-none focus:border-blue-400 w-full">{TIMES.map((t) => <option key={t} value={t}>{t}</option>)}</select>
+                    ) : <div className="text-[10px] text-slate-400 italic px-1">No pickup</div>}
                   </div>
-                  <div className="flex items-center justify-end gap-2 w-[70px]">
-                    <button onClick={() => setNoteOpen(isNoteOpen ? null : k)} className={`p-2 rounded-lg transition-all ${current.note || isNoteOpen ? "bg-blue-50 text-blue-600" : "text-slate-300 hover:text-slate-500 hover:bg-slate-50"}`}><StickyNote className="w-4 h-4" /></button>
-                    <div className="w-8 h-8 flex items-center justify-center">{isChanged && <button onClick={() => { const next = { ...edits }; delete next[k]; setEdits(next); }} className="p-2 text-amber-500 hover:bg-amber-50 rounded-lg transition-all" title="Undo changes"><Undo2 className="w-4 h-4" /></button>}</div>
+                  <div className="sm:col-start-4">
+                    <textarea
+                      rows={2}
+                      value={current.note || ""}
+                      onChange={(e) => setEdits((prev) => ({ ...prev, [k]: { ...current, note: e.target.value } }))}
+                      placeholder="Add a note for this day..."
+                      className="w-full text-[11px] p-1 bg-white border border-slate-200 rounded-lg outline-none focus:border-blue-400 min-h-[30px] leading-tight resize-none"
+                    />
                   </div>
+                  <div className="w-7 h-7 flex items-center justify-center sm:col-start-5">{isChanged && <button onClick={() => { const next = { ...edits }; delete next[k]; setEdits(next); }} className="p-1.5 text-amber-500 hover:bg-amber-50 rounded-lg transition-all" title="Undo changes"><Undo2 className="w-3.5 h-3.5" /></button>}</div>
                 </div>
-                <AnimatePresence>{isNoteOpen && <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden"><div className="px-4 pb-4"><textarea value={current.note || ""} onChange={(e) => setEdits((prev) => ({ ...prev, [k]: { ...current, note: e.target.value } }))} placeholder="Add a note for this day..." className="w-full text-xs p-3 bg-white border border-slate-200 rounded-xl outline-none focus:border-blue-400 min-h-[60px] resize-none" /></div></motion.div>}</AnimatePresence>
               </div>
             );
           })}
@@ -808,15 +823,15 @@ export default function App() {
       {(pendingIncoming.length > 0 || pendingOutgoing.length > 0) && (
         <section className="mb-12 space-y-3">
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Active Proposals</h3>
-          {pendingIncoming.map((p: any) => <ProposalCard key={p.id} p={p} type="in" theme={activeTheme} onRespond={handleRespond} />)}
-          {pendingOutgoing.map((p: any) => <ProposalCard key={p.id} p={p} type="out" theme={activeTheme} />)}
+          {pendingIncoming.map((p: any) => <ProposalCard key={p.id} p={p} type="in" theme={activeTheme} onRespond={handleRespond} onRemove={handleRemoveProposal} />)}
+          {pendingOutgoing.map((p: any) => <ProposalCard key={p.id} p={p} type="out" theme={activeTheme} onRemove={handleRemoveProposal} />)}
         </section>
       )}
     </div>
   );
 }
 
-function ProposalCard({ p, type, theme, onRespond }: { p: any; type: "in" | "out"; theme: any; onRespond?: (id: string, status: string, resp: string) => void }) {
+function ProposalCard({ p, type, theme, onRespond, onRemove }: { p: any; type: "in" | "out"; theme: any; onRespond?: (id: string, status: string, resp: string) => void; onRemove?: (id: string) => void }) {
   const [open, setOpen] = useState(type === "in");
   const [reply, setReply] = useState("");
   const otherUser = p.from === "collin" ? "Collin" : "Tiia";
@@ -842,6 +857,14 @@ function ProposalCard({ p, type, theme, onRespond }: { p: any; type: "in" | "out
                     <button onClick={() => onRespond(p.id, "declined", reply)} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-xs transition-all"><XCircle className="w-4 h-4" /> Decline</button>
                   </div>
                 </div>
+              )}
+              {onRemove && (
+                <button
+                  onClick={() => onRemove(p.id)}
+                  className="w-full py-2 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-all border border-rose-100"
+                >
+                  Remove Proposal
+                </button>
               )}
             </div>
           </motion.div>
