@@ -1,0 +1,2024 @@
+1
+00:00:00,000 --> 00:00:08,320
+exactly okay yeah if not i'll do yeah jesse's jess where i've uh in a few months when i remember it's
+
+2
+00:00:08,320 --> 00:00:20,080
+there all right all right uh well thank you so much for finding the time to chat with us i know
+
+3
+00:00:20,080 --> 00:00:27,280
+it's always easy time especially for you it's totally understandable uh we did put together
+
+4
+00:00:27,280 --> 00:00:32,480
+the overview kind of like the proposal how we potentially see you know taking shadows forward
+
+5
+00:00:32,480 --> 00:00:37,440
+to the mobile and how we can support you guys on these so i think what we can do there's not many
+
+6
+00:00:37,440 --> 00:00:45,520
+slides i promise uh so we can maybe very on a high level run for them and then we can you know go into
+
+7
+00:00:45,520 --> 00:00:52,640
+the questions um so ultimately we also would be happy to adjust if let's say there's more stuff
+
+8
+00:00:52,640 --> 00:00:57,760
+needed in today's kind of like overview then for your leadership to take a look at an review and
+
+9
+00:00:57,760 --> 00:01:07,200
+be happy to adjust it and add more or restructure it depends whatever feels best so perfect uh let me
+
+10
+00:01:07,200 --> 00:01:11,440
+start here in the spring i hope i can make it work
+
+11
+00:01:14,000 --> 00:01:14,960
+i love teams
+
+12
+00:01:18,320 --> 00:01:21,200
+said nobody ever
+
+13
+00:01:29,680 --> 00:01:36,640
+hey uh renata could i um could i just ask one question um and maybe just to
+
+14
+00:01:37,200 --> 00:01:43,200
+uh recap from previous conversations just uh maybe and also james i haven't met you
+
+15
+00:01:44,480 --> 00:01:49,200
+so hello
+
+16
+00:01:51,200 --> 00:01:53,200
+first time
+
+17
+00:01:53,200 --> 00:02:07,200
+and also fellow fellow bald person
+
+18
+00:02:07,200 --> 00:02:17,200
+fellow bald person
+
+19
+00:02:18,800 --> 00:02:20,240
+wait a second are we all
+
+20
+00:02:20,240 --> 00:02:22,240
+you're feeling unique
+
+21
+00:02:23,040 --> 00:02:29,120
+quick introduction i'm calling uh hi james um i'm the svp of products here at jaget so i essentially look
+
+22
+00:02:29,120 --> 00:02:34,880
+after all things related to uh making video games um so we're very close to jesse on dragon wilds and
+
+23
+00:02:34,880 --> 00:02:40,800
+shadows but also with the teams over on runescape and old school as well cool yeah pleasure to meet
+
+24
+00:02:40,800 --> 00:02:47,440
+you uh yeah my name is colin i'm a creative director here overseeing all of the kind of creative direction on
+
+25
+00:02:47,440 --> 00:02:55,680
+all the projects that we have um i am also a lead a product lead of one of the projects um that we're working with um
+
+26
+00:02:56,960 --> 00:03:08,560
+uh with void interactive actually um so i'm i'm leading that up and leading that uh the whole creative process of of that one uh really excited about that um and
+
+27
+00:03:09,360 --> 00:03:14,160
+and yeah uh i've been helping out with this pitch playing the game it's been super fun
+
+28
+00:03:14,720 --> 00:03:18,800
+uh and then building out like the possibilities for what mobile could look like
+
+29
+00:03:19,200 --> 00:03:25,040
+uh my background is from mainly from uh free to play mobile so that space is very familiar to me
+
+30
+00:03:25,600 --> 00:03:33,440
+um and it's actually only recently that i've been now diving into into more pc um pc focus so i think this is
+
+31
+00:03:33,440 --> 00:03:39,360
+like a perfect uh project uh project in a way and and i'm very excited like i think there's a good match
+
+32
+00:03:39,360 --> 00:03:46,080
+here i think i can provide a lot of um useful insights and and and uh and help you guys with
+
+33
+00:03:46,080 --> 00:03:53,280
+this one so very excited yeah yeah good to yeah good fun chatting with us it's nice to meet colin yeah nice to
+
+34
+00:03:53,280 --> 00:04:06,000
+meet you all right now wait now i have the questions um okay i'll shut up just let me know when i start
+
+35
+00:04:07,440 --> 00:04:15,120
+no uh maybe one thing was uh maybe we could get a just a recap of the current uh like thinking of the
+
+36
+00:04:15,120 --> 00:04:21,600
+project uh because when we were talking last time um was about the current status of the game that was
+
+37
+00:04:21,600 --> 00:04:29,040
+really early in uh you know prototype still doing the the dog fighting and doing the prototype for
+
+38
+00:04:29,040 --> 00:04:36,080
+that and no real systems yet not really sure yet about the monetization model would it be free or
+
+39
+00:04:36,080 --> 00:04:44,880
+premium at launch or you know that kind of stuff um has there been any um any change on that or any kind
+
+40
+00:04:44,880 --> 00:04:53,920
+of like uh direction given on that or is it still very early stages so we i mean we've had conversations
+
+41
+00:04:53,920 --> 00:05:00,480
+in the meanwhile so there there are some things are more clear to us than uh um than other stuff
+
+42
+00:05:00,480 --> 00:05:10,240
+that's still unknown but we are leaning towards that it is a uh still a premium purchase with some kind of
+
+43
+00:05:10,240 --> 00:05:17,520
+seasonal pass that that seems to be the direction in which we're uh in which we're headed together with
+
+44
+00:05:17,520 --> 00:05:24,960
+an mtx shop basically right so this is you buy the uh dragon wilds and then it's an extension that you
+
+45
+00:05:24,960 --> 00:05:35,600
+get for free right no no no okay so the shadows is a purchase uh okay independently of dragon dragon wild
+
+46
+00:05:35,600 --> 00:05:43,200
+itself right okay so shadows is a purchase and then there is a seasonal pass structure uh and a mtx or
+
+47
+00:05:43,200 --> 00:05:50,240
+cash shop okay and so mobile we could do something like a trial kind of like you you can download the
+
+48
+00:05:50,240 --> 00:05:56,400
+game and you can play it for example or like you know some part of the game and then you buy the
+
+49
+00:05:56,400 --> 00:05:59,600
+extension or was there any thought about the mobile version
+
+50
+00:05:59,600 --> 00:06:07,840
+um no we haven't we haven't given that uh a lot of thoughts uh just yet we're we're mainly discussing
+
+51
+00:06:07,840 --> 00:06:16,880
+um you know the the sort of the idea of subs versus the premium purchase uh uh like what kind of sub
+
+52
+00:06:17,440 --> 00:06:23,440
+what that means for you know other games in our portfolio like the existing mmos like old school
+
+53
+00:06:23,440 --> 00:06:31,920
+runescape would there be a benefit somehow um we're we're talking about uh pricing strategy um the only
+
+54
+00:06:31,920 --> 00:06:41,360
+thing that we did discard was going free to play uh essentially as in um the free the type of free to
+
+55
+00:06:41,360 --> 00:06:50,800
+play that makes you design the entire game around uh engagement loops and uh certain uh fomo practices
+
+56
+00:06:50,800 --> 00:06:58,720
+um okay right so yeah all right yeah i think that's that's really clear and and and in regards to
+
+57
+00:06:58,720 --> 00:07:07,760
+the prototype in regards to the prototype this this this month we are basically um delivering our dragon
+
+58
+00:07:07,760 --> 00:07:16,080
+riding prototype and that is uh and and after that we are going to go into uh more of a uh multiplayer
+
+59
+00:07:16,080 --> 00:07:22,960
+setting up multiplayer um massively multiplayer uh back-end technology and trying that out
+
+60
+00:07:23,520 --> 00:07:30,800
+um but after that we'll be moving on to building the vertical slice for the end of this year that's
+
+61
+00:07:30,800 --> 00:07:36,960
+the first thing that we're going to do after this period of prototyping to basically get a full uh arted
+
+62
+00:07:36,960 --> 00:07:45,680
+up uh one of everything uh vertical slice before the end of the year yeah i think that was pretty
+
+63
+00:07:45,680 --> 00:07:51,040
+aligned with what the expectation was before in the previous call i think that was the same yeah cool
+
+64
+00:07:52,080 --> 00:07:59,040
+okay yeah it makes sense um and then like on the terms of maybe understanding a little bit on the
+
+65
+00:07:59,040 --> 00:08:03,200
+on the broader like there's still a lot of emphasis on trying to bring the mobile version
+
+66
+00:08:04,080 --> 00:08:10,720
+like was there still an idea that that would be launched afterwards or then would it be sync launch
+
+67
+00:08:10,720 --> 00:08:20,560
+like have you i mean maybe a more of a discussion so i mean um i don't know how james uh sees it but
+
+68
+00:08:23,040 --> 00:08:29,440
+um it will be hard given that at the end of this year's vertical slice and then the end of next year
+
+69
+00:08:29,440 --> 00:08:36,800
+uh uh will be soft launch um because i know how development on this project goes it always comes down
+
+70
+00:08:36,800 --> 00:08:44,080
+to the wire right so it's it's like in every project that's that star fighter from battlestar
+
+71
+00:08:44,080 --> 00:08:50,480
+galactica which just makes it into the hangar uh like sliding across across the steel with a shower of
+
+72
+00:08:50,480 --> 00:09:00,720
+sparks that's basically everything liverpool but it landed but it landed yeah so uh you know parallel
+
+73
+00:09:00,720 --> 00:09:09,360
+development um we would need to be smart about that how we would do that and otherwise it becomes a
+
+74
+00:09:09,360 --> 00:09:20,080
+matter of where when is the product mature enough so that we can hand it over to you in in in some way
+
+75
+00:09:20,080 --> 00:09:29,280
+otherwise there will be yeah we will need to find some other path um forward but yeah yeah it makes
+
+76
+00:09:29,280 --> 00:09:34,720
+sense yeah i think yeah we can go into the details obviously i think that's that's also part of you
+
+77
+00:09:34,720 --> 00:09:41,360
+know some of the research exploration in this like mobile like rnd i think we can also plan out like
+
+78
+00:09:41,360 --> 00:09:47,120
+what would be some options for how the development could could work um i think you don't know that
+
+79
+00:09:47,120 --> 00:09:52,320
+unless you know more about the project and know about the details of how it's being developed um
+
+80
+00:09:53,600 --> 00:09:58,320
+but yeah maybe i'll yeah that was kind of just opener just to understand a little bit more like
+
+81
+00:09:58,320 --> 00:10:03,840
+kind of current state of things because we've had a few conversations yeah thank you yeah i think
+
+82
+00:10:04,400 --> 00:10:10,640
+yeah i think to kind of address you're saying timelines and mobile i think is a very big question
+
+83
+00:10:10,640 --> 00:10:19,680
+mark that we probably want to get out together um i'm anticipating we wouldn't soft launch on pc
+
+84
+00:10:20,320 --> 00:10:27,120
+console and mobile simultaneously just to avoid all the pressures that comes with that so my assumption is
+
+85
+00:10:27,120 --> 00:10:34,720
+the mobile launch would come at some point between the initial soft launch point towards the town of
+
+86
+00:10:34,720 --> 00:10:45,200
+next year and the full commercial launch which jesse we currently mapping end of 28 early 29 yeah something
+
+87
+00:10:45,200 --> 00:10:53,040
+like that yeah um but where on that timeline it drops is i think a very big tpd i feel it's it's
+
+88
+00:10:53,040 --> 00:11:00,480
+uh personally i feel it's more likely that we would be able to uh um that we would be able to launch on pc
+
+89
+00:11:00,480 --> 00:11:08,880
+and mobile uh i would find that more likely than that we would do pc and consoles to be uh to be honest
+
+90
+00:11:08,880 --> 00:11:14,960
+because of you know just console certification and everything that comes with that uh mobile might be a
+
+91
+00:11:14,960 --> 00:11:23,120
+a bit more straightforward but the the question is how would you guys stay in tandem with us yeah right
+
+92
+00:11:23,120 --> 00:11:32,960
+so let's take 2027 um like how would that work where we are developing the game and then you take
+
+93
+00:11:33,680 --> 00:11:42,480
+uh uh you take our repositories and make that work step after step on on mobile is that is that way to do it
+
+94
+00:11:42,480 --> 00:11:50,640
+um would that would that be horribly inefficient uh i mean i yeah that's actually would be uh maybe i can
+
+95
+00:11:50,640 --> 00:11:57,680
+jump in here uh now i'm thinking we should have brought you see here uh not the you see who was the
+
+96
+00:11:57,680 --> 00:12:06,080
+we have many uses this is the thing uh one of the use many uses that we have in the company who uh
+
+97
+00:12:06,080 --> 00:12:13,360
+uh i was leading the warframe uh project uh and maybe he would be able to talk a little bit more
+
+98
+00:12:13,360 --> 00:12:19,520
+but basically before the warframe we were doing the wavefinder with digital extremes and we found it
+
+99
+00:12:19,520 --> 00:12:25,600
+for example way more efficient to do it we were kind of following if we are kind of like in a similar
+
+100
+00:12:25,600 --> 00:12:31,200
+fashion maybe which what we're going to do with shadows we were following development pretty much
+
+101
+00:12:31,760 --> 00:12:37,840
+uh kind of like milestone after the milestone versus the warframe there was a game of already
+
+102
+00:12:37,840 --> 00:12:44,560
+with 10 years of legacy which we kind of was kind of like dropped at us in a way so uh we found it
+
+103
+00:12:44,560 --> 00:12:51,920
+kind of like uh very efficient in a way where we would be following and very close by into the development
+
+104
+00:12:51,920 --> 00:12:59,120
+especially considering that mobile kind of like is a plan from the get-go uh so we're going to very
+
+105
+00:12:59,120 --> 00:13:06,240
+efficient that way but then again it also depends whether you want to simship uh with pc and mobile
+
+106
+00:13:06,240 --> 00:13:12,640
+for example or not and how that launch schedule is going to look like well in soft launch we would
+
+107
+00:13:12,640 --> 00:13:20,080
+want to try out uh we would want to get a read on on performance right on the metrics yeah of course
+
+108
+00:13:20,080 --> 00:13:33,600
+monetization but also um yeah um uh dao um all of the engagement metrics uh that would indicate to us
+
+109
+00:13:33,600 --> 00:13:41,840
+that we've got something sticky yeah that there's uh enough um enough to do um so that we could do that
+
+110
+00:13:41,840 --> 00:13:51,280
+on mobile as well the only thing is when it comes to monetization there is of course yeah for us it
+
+111
+00:13:51,280 --> 00:13:59,600
+makes sense to have on pc the product be a premium purchase um there's many reasons for that but
+
+112
+00:14:00,800 --> 00:14:08,080
+it will be tricky for us to let go of that except if we find some sort of way in which
+
+113
+00:14:08,880 --> 00:14:14,240
+a sub like a literal sub could could cover could cover all of our um
+
+114
+00:14:16,720 --> 00:14:21,760
+could cover what we would need out of the uh out of the project from a revenue perspective
+
+115
+00:14:22,320 --> 00:14:29,520
+yeah but yeah so the sub would give you access to mobile is that what you're trying to say as well
+
+116
+00:14:29,520 --> 00:14:35,840
+like that you would get the whole suite of games in a way is it did i understand that yeah i mean
+
+117
+00:14:35,840 --> 00:14:40,640
+there's so there's so much that needs to be discussed uh around that potentially uh but
+
+118
+00:14:41,760 --> 00:14:46,240
+whichever way you whichever way you um
+
+119
+00:14:48,160 --> 00:14:53,120
+sort of cut it it would mean that there would if you do something like that it would mean that there
+
+120
+00:14:53,120 --> 00:15:00,720
+for people who are just mobile gamers uh and not pc gamers um how would you what would be the
+
+121
+00:15:00,720 --> 00:15:06,480
+proposition for them yeah right um would they have to buy the game then on on mobile that's
+
+122
+00:15:07,600 --> 00:15:12,960
+not ideal because it's not the the right ecosystem for that um
+
+123
+00:15:14,800 --> 00:15:18,960
+yeah that's why i guess i was mentioning the kind of the tribe you know you can download it
+
+124
+00:15:19,520 --> 00:15:25,600
+play a certain period of time um when you figure out what that unlock is and then you unlock the rest
+
+125
+00:15:25,600 --> 00:15:30,400
+by making a purchase so it allows you to get into the game but anyways i mean there are a few examples
+
+126
+00:15:30,400 --> 00:15:35,440
+that are doing that but okay okay yeah i would be interested i would be interested in learning more
+
+127
+00:15:35,440 --> 00:15:42,960
+about um which games have found success in doing uh in doing so like the kind of success that we're
+
+128
+00:15:42,960 --> 00:15:48,640
+looking for uh whether whether there are games out there to do something like this um
+
+129
+00:15:48,640 --> 00:15:55,920
+um because obviously we could try um try a lot but um yeah of course we want to have a strategy and
+
+130
+00:15:55,920 --> 00:16:01,040
+like you know what's the projections with you know how many down and yeah we would of course not
+
+131
+00:16:01,760 --> 00:16:07,440
+do this the thing is the the the one the one thing that i would like to stay away from personally
+
+132
+00:16:07,440 --> 00:16:14,160
+is uh turning the mobile version into a companion app um which i don't think is the right strategy
+
+133
+00:16:14,160 --> 00:16:22,080
+either we we do it in the right way for players on mobile uh but not but but not shrink the audience
+
+134
+00:16:22,080 --> 00:16:28,080
+by having it only be valuable to people who have already owned the game on pc for instance yeah one
+
+135
+00:16:28,080 --> 00:16:34,240
+game that we've been following at least uh internally is the deep brock galactic survivor which has a
+
+136
+00:16:34,240 --> 00:16:40,320
+premium purchase um recently when we looked at it i think it was already a couple months ago i can look
+
+137
+00:16:40,320 --> 00:16:47,280
+at it again um because now this is sort of new information uh amount the direction um i can look
+
+138
+00:16:47,280 --> 00:16:55,120
+into this more but this is one uh project that at least uh had initial success uh for doing this kind
+
+139
+00:16:55,120 --> 00:17:02,000
+of first uh you could play it and then there's a purchase to uh play the next world and unlock more
+
+140
+00:17:02,000 --> 00:17:08,720
+skins and um so that that's why is it is it is it like the shareware model essentially yeah exactly yeah
+
+141
+00:17:08,720 --> 00:17:13,360
+yeah that demo plus then chapter locks or exactly yeah
+
+142
+00:17:15,920 --> 00:17:23,200
+okay but i can share more information kind of uh sorry colleagues no it's good there is there is
+
+143
+00:17:23,200 --> 00:17:30,160
+there is various ways we kind of like also now in connection to another project we also very closely
+
+144
+00:17:30,160 --> 00:17:37,840
+discussion with with the app store and google play and uh kind of like exploring because it seems like
+
+145
+00:17:37,840 --> 00:17:46,560
+both of them put in a lot of efforts in regards to not necessarily pure free to play uh scenario for
+
+146
+00:17:46,560 --> 00:17:53,680
+the for the games on the mobile but also like various other scenarios scenarios here like also pushing
+
+147
+00:17:53,680 --> 00:17:59,600
+it through their marketing support and what's not so i think there are definitely ways maybe it's just
+
+148
+00:17:59,600 --> 00:18:06,800
+not necessarily a pure free to play but uh maybe it's also not out of route to take with this
+
+149
+00:18:08,240 --> 00:18:15,040
+okay did you already share or not about the uh google is that what you meant the google play
+
+150
+00:18:15,040 --> 00:18:21,440
+like revamp of the store yeah so they have a big project underway to revamp their their offering their
+
+151
+00:18:21,440 --> 00:18:26,560
+store offering uh what did they say something like a billion dollars they're investing into
+
+152
+00:18:26,560 --> 00:18:32,320
+like redoing the entire store of discoverability so they can make it more custom more specific to
+
+153
+00:18:32,320 --> 00:18:38,480
+to individual players um a lot like what steam is doing right i think steam is at least pushing the
+
+154
+00:18:38,480 --> 00:18:44,640
+bar in terms of releases on that and google play is doing something to try to bring in pc players
+
+155
+00:18:44,640 --> 00:18:51,200
+so trying to move into that space now um it's pretty interesting um and they have what was the fun
+
+156
+00:18:51,200 --> 00:18:58,480
+thing that they have renata well it depends they're kind of like multiple funding kind of like uh not
+
+157
+00:18:58,480 --> 00:19:04,240
+they obviously not as big as let's say the budget for the project would be but they're they're they're
+
+158
+00:19:04,240 --> 00:19:11,440
+open to potentially do some sort of funding uh on the those projects that will be brought up in the
+
+159
+00:19:11,440 --> 00:19:17,680
+in the go in the google play store and will be allowed to play not only on the mobile but also kind
+
+160
+00:19:17,680 --> 00:19:24,480
+of like on the pc the big question here of course if there is you know if you want to actually even
+
+161
+00:19:24,480 --> 00:19:31,680
+take that path there that is kind of like still a question mark and let's be honest the google play is
+
+162
+00:19:32,400 --> 00:19:38,880
+of steam and very far from it at this point so i think kind of like of course it will now they're
+
+163
+00:19:38,880 --> 00:19:46,000
+investing heavily and they um we'll see where they will be in a couple of years uh but there's definitely
+
+164
+00:19:46,000 --> 00:19:56,160
+seems to be a lot of effort and opportunity there for sure okay all righty shall we get into it
+
+165
+00:19:58,800 --> 00:20:02,000
+calling started just one question all of a sudden we
+
+166
+00:20:04,480 --> 00:20:14,000
+we talked about chocolate for like 15 minutes right well that's true that's true okay okay uh anyways so uh
+
+167
+00:20:14,000 --> 00:20:19,280
+once again uh just before we go in there's not too many slides so please join me and then calling
+
+168
+00:20:19,280 --> 00:20:25,840
+jumping as well so we have a first slide with just executive summary of what is going to be presented
+
+169
+00:20:25,840 --> 00:20:32,720
+uh further uh down the road um the way we were looking into this kind of like potentially going
+
+170
+00:20:32,720 --> 00:20:40,640
+step forward is of course to start with r d uh for ultimately reduce the risk and avoid the costly
+
+171
+00:20:40,640 --> 00:20:47,360
+reward so we kind of like we will be looking into uh the mobile things and uh kind of like
+
+172
+00:20:48,880 --> 00:20:53,920
+trying to not distract the main team as much as possible but at the same time thinking about the
+
+173
+00:20:53,920 --> 00:21:01,600
+mobile uh native things that needs to be kept in mind in order for us to then not end up in a situation
+
+174
+00:21:01,600 --> 00:21:07,280
+uh which you know we're getting closer to let's say self-blanch and all of a sudden there's lots of stuff
+
+175
+00:21:07,280 --> 00:21:14,480
+that needs to be written for uh for for that uh very much phased approach so we're looking into
+
+176
+00:21:14,480 --> 00:21:21,200
+kind of like going into phases uh as i mentioned starting with r d going into the validation
+
+177
+00:21:21,200 --> 00:21:26,720
+production soft launch and launch soft launch will heavily depends on what we will decide for it to be
+
+178
+00:21:27,280 --> 00:21:35,200
+ultimately uh so we're not necessarily putting kind of like any um specific budget in mind for the
+
+179
+00:21:35,200 --> 00:21:42,320
+soft launch it will be kind of like it depends how long we will we'll make it uh from our side uh we
+
+180
+00:21:42,320 --> 00:21:49,600
+have a proven track record which we've been i think million times already mentioning uh warframe is the
+
+181
+00:21:49,600 --> 00:21:58,800
+latest one the wayfinder right before that uh lots of experience uh on unreal uh and proprietary i know the
+
+182
+00:21:58,800 --> 00:22:06,560
+proprietor here is not that much of a relevance but still uh focus on performance scalability uh and
+
+183
+00:22:06,560 --> 00:22:14,080
+of course mobile first uh ux and ui ultimately as well clear deliverables i will get into those a little
+
+184
+00:22:14,080 --> 00:22:23,680
+bit later uh on basically on each phase we will have a very clear list of what are the results uh would be
+
+185
+00:22:23,680 --> 00:22:31,040
+estimated timeline to launch the ballpark here just because once again we get to decide what the stock
+
+186
+00:22:31,040 --> 00:22:37,840
+launch will look like uh the budgets for the simplicity of things we've put it in town so it will
+
+187
+00:22:37,840 --> 00:22:46,080
+be easier for you guys uh and a seamless alignment of ongoing pc uh console development or pc let's say
+
+188
+00:22:46,080 --> 00:22:56,400
+let's see how how how we're gonna go forward um colin do you want to take it away yeah sure um yeah
+
+189
+00:22:56,400 --> 00:23:02,320
+based on our conversations uh we put this together you know taking all the feedback um and you know
+
+190
+00:23:02,320 --> 00:23:10,880
+conversations we've had face to face and um i think so what we're proposing is this uh sort of mobile
+
+191
+00:23:10,880 --> 00:23:19,280
+research and development early on this phase um where we can help to um i think the first thing is
+
+192
+00:23:19,280 --> 00:23:26,160
+to alleviate and to discovery of any uh open questions that might have that come out of the
+
+193
+00:23:26,160 --> 00:23:32,160
+mobile game experience so like as we're developing we'll figure out um what are the things that we need
+
+194
+00:23:32,160 --> 00:23:39,200
+to consider as we move on to the production um and i think we learned this from working on warframe
+
+195
+00:23:39,200 --> 00:23:45,040
+that if you wait till the very end there's a huge development cost um and then the game isn't
+
+196
+00:23:45,040 --> 00:23:50,240
+really built for mobile it's more like hey you have a pc game and then you're building it for mobile
+
+197
+00:23:50,240 --> 00:23:57,360
+afterwards um we could go into that a lot of what that experience has turned into and and um i think
+
+198
+00:23:57,360 --> 00:24:03,200
+it's mildly successful but i think it could have been much more if had been taken into account from the
+
+199
+00:24:03,200 --> 00:24:08,560
+very beginning of course you know different projects but nonetheless i think there's learnings there
+
+200
+00:24:09,760 --> 00:24:17,840
+um i yeah we understand that the core gameplay is very much still in very early stages i think in
+
+201
+00:24:17,840 --> 00:24:23,840
+my mind what we could do is that when you guys are getting to vertical slice um we could already have
+
+202
+00:24:23,840 --> 00:24:29,520
+a mobile i mean this is i'm talking you know more of like we could have a mobile prototype that would
+
+203
+00:24:29,520 --> 00:24:35,120
+be the deliverable and then say hey like this is what we need to do in vertical slice and afterwards in
+
+204
+00:24:35,120 --> 00:24:41,680
+order to get the game the mobile version to be at um um in parity we could talk a little bit about
+
+205
+00:24:41,680 --> 00:24:47,120
+like milestones do we deliver you know you guys deliver milestone basis then maybe we take whatever
+
+206
+00:24:47,120 --> 00:24:52,720
+milestone builds that you have and then we update those i think that's one idea could dive into that
+
+207
+00:24:52,720 --> 00:24:58,880
+um i think probably better to have maybe sampa as well in that conversation but that's some of the
+
+208
+00:24:58,880 --> 00:25:06,320
+approaches that we've had with uh other projects as well um yeah and then the main outcome of this
+
+209
+00:25:06,320 --> 00:25:12,400
+research product this phase would be just this analysis i think both from a technical perspective
+
+210
+00:25:12,400 --> 00:25:18,640
+but also i would uh consider the user experience like what are the big scope drivers in the user
+
+211
+00:25:18,640 --> 00:25:24,000
+experience that like how much time and energy we will need in the development in order to deliver those
+
+212
+00:25:24,960 --> 00:25:32,000
+technical things uh things along the lines of you know latency networking um i think you know try
+
+213
+00:25:32,000 --> 00:25:36,080
+accounts you know these kind of things that in performance of the mobile version will need to
+
+214
+00:25:36,080 --> 00:25:43,440
+take into account um just to get a view of the land so that when you hit the um the next phases you
+
+215
+00:25:43,440 --> 00:25:48,240
+kind of understand okay hey this is what's coming this is what we know we need to do for mobile
+
+216
+00:25:49,040 --> 00:25:57,200
+um yeah and we you know uh be a relatively small team uh and then yeah we would provide all the
+
+217
+00:25:57,200 --> 00:26:03,200
+information i think one other element here is the design aspect or kind of product facing stuff
+
+218
+00:26:03,200 --> 00:26:09,360
+i think this is something that you know we've had discussions about um we're we are of course open to
+
+219
+00:26:09,360 --> 00:26:16,720
+to helping and supporting on that way uh in that way as well uh and yeah i think we'll go into the
+
+220
+00:26:16,720 --> 00:26:19,520
+phases in the next slides any questions at this point
+
+221
+00:26:22,560 --> 00:26:30,160
+no not not yet okay so yeah did you know you do you want to do right
+
+222
+00:26:32,720 --> 00:26:40,000
+it doesn't matter i can jump in and sure you you say you just saved me then later from saying some
+
+223
+00:26:40,000 --> 00:26:47,680
+stupid things so uh for the mobile rd uh we're ultimately looking to answer some questions uh on
+
+224
+00:26:47,680 --> 00:26:56,080
+this and in reality we don't necessarily even need a belt to uh to play this like i think kind of like
+
+225
+00:26:56,080 --> 00:27:01,840
+we're not necessarily uh we understand that the game in the prototype stage and there's of course
+
+226
+00:27:01,840 --> 00:27:08,240
+you know there will be some time until the vertical slide so uh as colin was kind of mentioning we'll be
+
+227
+00:27:08,240 --> 00:27:13,760
+looking into like what would be the difference between the platform and from many perspective
+
+228
+00:27:13,760 --> 00:27:20,320
+the user experience is one thing monetization of course as you know we're we know it's a big topic
+
+229
+00:27:20,320 --> 00:27:26,160
+how we then make it best for the mobile so that it doesn't become that companion app which we don't
+
+230
+00:27:26,160 --> 00:27:33,440
+want it to become what are the mobile native adjustments that should be made uh and the technical
+
+231
+00:27:33,440 --> 00:27:40,240
+and design uh decision basically which you know we could think of in regards to while the pc
+
+232
+00:27:40,800 --> 00:27:47,840
+uh development is ongoing um are we if we already know that the mobile is happening
+
+233
+00:27:47,840 --> 00:27:54,000
+and we we kind of like we can plan for it ahead of time um what device performance targets what
+
+234
+00:27:54,800 --> 00:28:01,120
+ultimately do we target the low end android devices or we don't and we focus focus on the higher
+
+235
+00:28:01,120 --> 00:28:07,520
+and devices those kind of things so all of this ultimately could be even started without necessarily
+
+236
+00:28:07,520 --> 00:28:13,200
+that's much of the you know we don't need the vertical slides for it uh maybe our cto always
+
+237
+00:28:13,200 --> 00:28:22,480
+disagree with me uh not really um so um basically all of that and we will work on it in the form of
+
+238
+00:28:22,480 --> 00:28:28,800
+kind of like doing all of this research and providing uh ultimately the results in the form of deliverables
+
+239
+00:28:28,800 --> 00:28:35,120
+and reports and how that's going to look like uh at least how we see the mobile based on our own
+
+240
+00:28:35,120 --> 00:28:41,680
+experience in mobile development but also working in this specific kind of type of project where the
+
+241
+00:28:41,680 --> 00:28:49,920
+pc came brought up to the mobile calling is there's anything you want to add yeah i think just at the bottom
+
+242
+00:28:49,920 --> 00:28:56,400
+just emphasizing the the deliverables i do think that it would be beneficial i mean anyways that like the
+
+243
+00:28:56,400 --> 00:29:03,920
+the point here is that we would more or less operate independently so like it wouldn't be i think
+
+244
+00:29:03,920 --> 00:29:09,360
+you we've done this with other partners that we have one person who's the main point of contact
+
+245
+00:29:09,360 --> 00:29:15,520
+and then we have checkpoints where okay hey this is the deliverable um and then you know we whether
+
+246
+00:29:15,520 --> 00:29:20,720
+it's the the build you know i think i would love to see it and i think there was some mention there might
+
+247
+00:29:20,720 --> 00:29:26,240
+be something already that we i would love to see it on the build as soon as possible that's more of my
+
+248
+00:29:26,240 --> 00:29:32,720
+i think to get the gameplay and get how it feels we can see under some of those um you know control
+
+249
+00:29:32,720 --> 00:29:39,120
+schemes or or user experience challenges that there might be on the touch screen um and i think that can
+
+250
+00:29:39,120 --> 00:29:46,960
+be done already like quite quite early i think in this stage as well um and then yeah like i said
+
+251
+00:29:46,960 --> 00:29:54,000
+mentioned before i think regarding the you know the overall product and the package putting together
+
+252
+00:29:54,000 --> 00:29:59,600
+we can also provide any research or any um you know perspectives that you think would be would be
+
+253
+00:29:59,600 --> 00:30:08,800
+valuable or sort of at your disposal there um quick question uh the output of this phase would you see
+
+254
+00:30:08,800 --> 00:30:18,640
+it more as a um kind of a document or a presentation outlining the same assessment of um learnings and
+
+255
+00:30:18,640 --> 00:30:23,840
+what comes next or would that would you see the output of this being a even even if relatively simple
+
+256
+00:30:23,840 --> 00:30:30,480
+high level of prototype on mobile of how the gameplay controls in ux could work i think uh in regards to
+
+257
+00:30:30,480 --> 00:30:38,720
+what kind of like the how we were doing that on the uh wayfinder and the warframe we we were even
+
+258
+00:30:38,720 --> 00:30:44,000
+able to put something on the screen what that something is is of course you know the question
+
+259
+00:30:44,000 --> 00:30:50,560
+mark depends where the main title is sometimes we are still kind of like looking at this from the
+
+260
+00:30:50,560 --> 00:30:56,960
+perspective of seeing that with the controller in hand not that much of the tongue touch screen kind of
+
+261
+00:30:56,960 --> 00:31:06,000
+like uh but then there could be definitely something uh on the already on the mobile device not the
+
+262
+00:31:06,000 --> 00:31:17,040
+low low end one but but the maybe ios uh higher end version for sure yeah i think before uh making
+
+263
+00:31:18,160 --> 00:31:24,400
+any kind of like uh or any basically before making any kind of statement about that i think
+
+264
+00:31:24,400 --> 00:31:32,400
+it would be important to understand the game itself and like the technical um i get i guess some of them
+
+265
+00:31:32,400 --> 00:31:39,680
+um doing a little bit of discovery sample opening up the repo and you know checking out the build and firing
+
+266
+00:31:39,680 --> 00:31:45,600
+it up and i mean he's been doing this i don't know how many how many projects um he will pretty
+
+267
+00:31:45,600 --> 00:31:51,840
+pretty quickly be able to understand if we're able to bring a prototype in the end of uh usually
+
+268
+00:31:51,840 --> 00:32:00,400
+it's pretty feasible i think we did that with um already with um well maybe i can't say but with one project
+
+269
+00:32:00,400 --> 00:32:07,440
+project yeah i was about to yeah i know i was like come on let me say no but we have one project where
+
+270
+00:32:07,440 --> 00:32:12,240
+uh we were able to do that within the first milestone quite easily get get something that is
+
+271
+00:32:12,240 --> 00:32:18,880
+uh on the screen on the device so let me ask you this then and maybe it's a technical question
+
+272
+00:32:18,880 --> 00:32:29,280
+but essentially um shadows of actionfall at the moment is the dragon flying prototype there's not there's
+
+273
+00:32:29,280 --> 00:32:37,040
+nothing else it is just multiplayer dragon flying right so yeah there is no build or game that exists
+
+274
+00:32:37,040 --> 00:32:45,120
+that would give you a sort of read on how is this going to work because the first thing that we need
+
+275
+00:32:45,120 --> 00:32:57,520
+to do is we discovered through our own r d that um a the the player character in the pc game is way too
+
+276
+00:32:57,520 --> 00:33:04,960
+expensive right for a game that is supposed to have um you know 100 players players per server
+
+277
+00:33:06,800 --> 00:33:11,520
+and the reason for that is because the the the player character was built
+
+278
+00:33:11,520 --> 00:33:19,040
+really inefficiently by people who were used to developing in unity was it models or animation or
+
+279
+00:33:19,040 --> 00:33:26,080
+what was the like no the logic everything behind the skills the combat system the way that how that is
+
+280
+00:33:26,080 --> 00:33:37,840
+networked um yeah uh buffs boosts uh status effects like one single character uh uh culture character is so
+
+281
+00:33:38,480 --> 00:33:47,280
+expensive that um it it's uh it is horribly inefficient and that's and that's because when our team when
+
+282
+00:33:47,280 --> 00:33:53,760
+we started work originally unity developers who learned themselves unreal um and what does a unity
+
+283
+00:33:53,760 --> 00:34:00,480
+developer do that that starts in a real starts building on top of unreal yeah rather than using the uh
+
+284
+00:34:00,480 --> 00:34:07,200
+unreal itself so that is that that is where that came from and we have never had time as we grew more
+
+285
+00:34:07,200 --> 00:34:15,120
+experience with unreal to revisit all of that but in order to have a massively multiplayer shadows we
+
+286
+00:34:15,120 --> 00:34:21,040
+will need to refactor the entire culture player character and that is going to take us a couple of
+
+287
+00:34:21,040 --> 00:34:32,160
+months um and as we do that uh then we are able to you know make a network multiplayer uh massively
+
+288
+00:34:32,160 --> 00:34:38,800
+multiplayer version of it that will be able to bring skills uh back on online so really
+
+289
+00:34:40,560 --> 00:34:47,920
+if you were to open up the dragon prototype at the moment you would simply be opening up unreal in
+
+290
+00:34:47,920 --> 00:34:54,320
+which we have built a prototype yeah so it would it would give you literally nothing in that sense
+
+291
+00:34:54,320 --> 00:35:02,480
+but what you could do for instance is open up dragon wilds uh in unreal and see how far you would get
+
+292
+00:35:02,480 --> 00:35:08,560
+with that you would get horribly inefficient um uh colder character that is way too expensive
+
+293
+00:35:09,120 --> 00:35:15,600
+uh you would get all of the bugs all of the trickiness but you would be able to make a
+
+294
+00:35:16,400 --> 00:35:22,800
+uh for instance a control prototype or um uh you wouldn't be making it you would have to remake it
+
+295
+00:35:22,800 --> 00:35:30,400
+uh once kuldra is is reaches parity with the with the character suite and everything else so you would
+
+296
+00:35:30,400 --> 00:35:39,440
+have to rebuild it but you but you could um make a smaller sort of control demo of how it would work and
+
+297
+00:35:40,400 --> 00:35:47,040
+yeah yeah well ultimately i think i think if you suggest that sound that that that path would be
+
+298
+00:35:47,040 --> 00:35:56,400
+much better of course i'm not uh our cto sample so i will try not to comment that much for him but that
+
+299
+00:35:56,400 --> 00:36:03,840
+sounds reasonable and then i think in regards to rebuilding once again at least based on our previous
+
+300
+00:36:03,840 --> 00:36:11,120
+experience uh we were able as colin already mentioned uh without naming the project we were
+
+301
+00:36:11,120 --> 00:36:20,080
+able to get kind of like the uh the playable uh on the mobile phone uh pretty kind of like quickly so
+
+302
+00:36:20,080 --> 00:36:27,920
+as a part of that r d phase already uh and which means that ultimately even if we would need to redo
+
+303
+00:36:27,920 --> 00:36:33,680
+it for shadows because we we're going to do it at the beginning with dragon wild that not necessarily
+
+304
+00:36:33,680 --> 00:36:41,360
+will be very expensive exercise because it will be a part of the r and d is it so that the shadows will
+
+305
+00:36:41,360 --> 00:36:47,600
+be because i'm trying to understand like it's is it going to be an ex like are you going to take the
+
+306
+00:36:47,600 --> 00:36:54,480
+code base from from dragon wilds and then like and use that as a base and then have a separate scheme i'm
+
+307
+00:36:54,480 --> 00:37:05,760
+a bit confused now i can't i can't i can't imagine so uh our own exploration uh has revealed that a lot of
+
+308
+00:37:05,760 --> 00:37:12,880
+our systems are too expensive so we will have to rebuild them um so while one of the most expensive
+
+309
+00:37:12,880 --> 00:37:21,760
+things about the game is all of the assets right so all of the all of the art um uh it is basically all
+
+310
+00:37:21,760 --> 00:37:27,200
+all of the content but we've got that we've got all the animations we've got all of the you know
+
+311
+00:37:27,200 --> 00:37:35,040
+special effects the the art and all of the designs that we know work um it becomes a matter of porting
+
+312
+00:37:35,040 --> 00:37:46,400
+that for us to be unreal native right basically um and that's what we're going to be busy with uh and
+
+313
+00:37:46,400 --> 00:37:53,920
+from that we're going to build a networked uh massive vertical slice um uh and that is going to
+
+314
+00:37:53,920 --> 00:37:59,920
+take us the rest of the year so essentially in a way we're going to uh be yeah we're going to be
+
+315
+00:37:59,920 --> 00:38:08,800
+porting the game ourselves first to to be natively unreal as it were rather than inefficiently unreal
+
+316
+00:38:09,680 --> 00:38:12,400
+and and you're referring to the game this is dragon wilds
+
+317
+00:38:12,400 --> 00:38:20,000
+yes yes shadows is not a game sorry yeah i'm so sorry i had to ask the stupid question
+
+318
+00:38:24,240 --> 00:38:31,680
+got it okay okay so yeah so basically i think the we of course kind of like the our main focus
+
+319
+00:38:31,680 --> 00:38:38,160
+at the beginning will be in regards to the rnt phase and we can as we go forward we're happy to
+
+320
+00:38:38,160 --> 00:38:43,040
+maybe kind of like add a little bit more clarity on specific deliverables in what format those would
+
+321
+00:38:43,040 --> 00:38:48,800
+be but then we also outline a little bit other phases which will be going forward of course vertical
+
+322
+00:38:48,800 --> 00:38:55,600
+slice validation that is something that we will be looking into uh i'm guessing and end of this year
+
+323
+00:38:55,600 --> 00:39:02,160
+when you will be getting closer to the vertical slice yourself so that would be kind of like uh
+
+324
+00:39:02,160 --> 00:39:11,200
+uh again it it essentially we can all also wait until we deliver vertical slice where you actually
+
+325
+00:39:11,200 --> 00:39:19,200
+have something concrete to port uh right something concrete to work on it um i guess it depends on your
+
+326
+00:39:19,200 --> 00:39:29,360
+tolerance for for for for the chaos of what i just described to you um uh and i guess our tolerance for
+
+327
+00:39:29,360 --> 00:39:36,800
+how much an r d phase would actually cost and what it would deliver yeah so yeah
+
+328
+00:39:38,800 --> 00:39:44,400
+yeah makes sense totally um chaos i don't think we're afraid of that but definitely not
+
+329
+00:39:46,400 --> 00:39:54,240
+we'll get to the part of the uh we'll get to the part of the cost uh so in regards to the vertical
+
+330
+00:39:54,240 --> 00:40:01,200
+slice and validation and of course the production planning of course uh we're kind of like looking
+
+331
+00:40:01,200 --> 00:40:06,560
+into this once you get closer to the vertical slices i mentioned we will have a full mobile production
+
+332
+00:40:06,560 --> 00:40:14,080
+plan you'll have a playable mobile vertical slice so uh on on that front we kind of like already seen
+
+333
+00:40:14,080 --> 00:40:21,520
+something much more mature in a way on the mobile uh versus let's say the build that potentially could
+
+334
+00:40:21,520 --> 00:40:30,400
+have been in r d phase and uh something that would ultimately kind of like bring us the confidence
+
+335
+00:40:30,400 --> 00:40:37,680
+can it smoothly run on the mobile devices uh what would be the scope and resources and the timeline
+
+336
+00:40:37,680 --> 00:40:45,440
+uh required to kind of like for what first of all potentially follow you and get to that sim shape
+
+337
+00:40:45,440 --> 00:40:52,640
+let's say on a pc and mobile but then what would be the strategy at that point and how we ultimately
+
+338
+00:40:52,640 --> 00:40:53,760
+achieve that strategy
+
+339
+00:40:57,120 --> 00:41:02,320
+calling anything from you i want to rush a little bit because i think that it's kind of like a very
+
+340
+00:41:02,320 --> 00:41:08,480
+standard stuff i want to make sure we have we have time for the chat afterwards yeah i think no i think
+
+341
+00:41:08,480 --> 00:41:15,040
+i think it's okay to go forward i i still sort of a little bit with new information trying to wrap my
+
+342
+00:41:15,040 --> 00:41:23,360
+head around um uh kind of how it could work but i i i'm there's a vision there so i think i'm getting it
+
+343
+00:41:23,360 --> 00:41:30,080
+there but feel free i don't know okay yeah then production i i'm definitely not the person to tell you
+
+344
+00:41:30,080 --> 00:41:38,320
+what the production phase is uh so of course we'll be here uh focusing on the kind of like getting
+
+345
+00:41:38,320 --> 00:41:43,120
+ready at the end of the production for the soft launch and once again what that would be and doing
+
+346
+00:41:43,120 --> 00:41:52,240
+the comprehensive qa uh and pretty much getting ready uh to soft launch potentially go you know looking
+
+347
+00:41:52,240 --> 00:41:59,040
+into this player analytics and performance evaluation and what's not so uh very much crucial
+
+348
+00:41:59,040 --> 00:42:05,040
+so i mean i think what maybe for for production to keep in mind is the things around because you're
+
+349
+00:42:05,040 --> 00:42:09,440
+going to be from production you're going to entering into soft launch so you need to have a build that
+
+350
+00:42:09,440 --> 00:42:14,640
+has for example first time user experience um i mean obviously production is the execution you know
+
+351
+00:42:14,640 --> 00:42:22,320
+know all this but it's more of um to understand that this is the release kind of release ready uh build
+
+352
+00:42:22,320 --> 00:42:27,920
+obviously there'll be technical and and uh you know phases within soft launch but this would be then
+
+353
+00:42:27,920 --> 00:42:34,880
+the build that's the first opportunity to get face uh feedback from players unless i'm not sure about
+
+354
+00:42:34,880 --> 00:42:40,960
+the release strategy here like depends a little bit we could do some early testing close beta that kind
+
+355
+00:42:40,960 --> 00:42:48,000
+of stuff in production in order to get some more feedback on the i think the mainly thing is the um
+
+356
+00:42:48,720 --> 00:42:55,920
+is the con are the controls and then also the um uh the overall progression like how does it feel to
+
+357
+00:42:55,920 --> 00:43:00,320
+and the feedback the player gets when when they're leveling up and playing the game
+
+358
+00:43:04,320 --> 00:43:13,520
+already and then soft launch and launch uh once again uh in regards to the soft launch as i mentioned
+
+359
+00:43:13,520 --> 00:43:21,040
+that highly depends on the length of the soft launch we decide to go forward with and ultimately
+
+360
+00:43:22,000 --> 00:43:27,920
+at which stage we will get to the soft launch because there's multiple ways to get there there's
+
+361
+00:43:27,920 --> 00:43:34,320
+obviously much more lengthier soft launches where you the game i don't want to say not completed at
+
+362
+00:43:34,320 --> 00:43:41,600
+soft launch but maybe has less uh at the soft launch and kind of like build uh forward and then there is of
+
+363
+00:43:41,600 --> 00:43:48,480
+course the path where uh we pretty much kind of like go full on with the soft launch and gathering uh the
+
+364
+00:43:48,480 --> 00:43:55,360
+metrics and do improvements but then the phase itself is uh shorter we gather the metrics we see what
+
+365
+00:43:56,080 --> 00:43:57,840
+whether we achieve in those kps
+
+366
+00:44:01,680 --> 00:44:07,280
+and we get into the budget and timeline at the beginning i did already mention that kind of like
+
+367
+00:44:07,280 --> 00:44:14,320
+the overall now once again it is the ballpark still somewhat of a high level ballpark based on
+
+368
+00:44:14,320 --> 00:44:21,360
+our knowledge and how you know things going so uh and as i mentioned we're looking into things in phases
+
+369
+00:44:21,360 --> 00:44:28,960
+so we of course not looking into going full on in a you know let's say signing the full project and
+
+370
+00:44:28,960 --> 00:44:35,200
+we're thinking that kind of like the first initial step would be the mobile r d which would be lasting
+
+371
+00:44:35,200 --> 00:44:42,640
+about two months uh uh and then we can kind of like just go into that uh see how it's going i think that's
+
+372
+00:44:42,640 --> 00:44:51,360
+that is also um very kind of like a good thing for us to see um how we work together uh if it's
+
+373
+00:44:51,360 --> 00:44:56,720
+comfortable for both parties and what are the results we can bring during the r d phase and then
+
+374
+00:44:56,720 --> 00:45:04,880
+we kind of like moving forward uh what if you know if everybody is uh still interested in going
+
+375
+00:45:04,880 --> 00:45:11,520
+forward with the mobile so and then after the mobile r d that of course that is highly up to you
+
+376
+00:45:11,520 --> 00:45:18,080
+we also open to go into kind of like you know progressing in phases or going forward with kind
+
+377
+00:45:18,080 --> 00:45:24,480
+of like maybe i don't know the big bigger uh thing that is i think we're open for for anything
+
+378
+00:45:25,040 --> 00:45:31,120
+on that sense but we're thinking that the best way to kind of like to start is only focused on that r
+
+379
+00:45:31,120 --> 00:45:42,400
+in d phase and nothing else per se i also have a slide about our team but i'm not going to bore you
+
+380
+00:45:42,400 --> 00:45:46,640
+with that i'm going to share with you slides afterwards so then you can you can okay
+
+381
+00:45:50,400 --> 00:45:51,920
+all right um
+
+382
+00:45:51,920 --> 00:46:02,080
+um i mean to me it on on the surface looks uh uh reasonable and i understand that it's really hard
+
+383
+00:46:02,080 --> 00:46:08,960
+to go into detail without knowing anything further about the project itself i guess that we would need
+
+384
+00:46:08,960 --> 00:46:19,600
+to take your timeline and your budget and have a look at where for us it feels like it would fit most
+
+385
+00:46:20,160 --> 00:46:28,560
+logically on our uh on our timeline uh i am just you know being transparent i'm a little bit worried
+
+386
+00:46:28,560 --> 00:46:37,200
+that if we have you start right away um then we might get to a prototype in two months time
+
+387
+00:46:38,560 --> 00:46:44,080
+but then there will be a lot of waiting uh after after that until we catch up to you again
+
+388
+00:46:44,080 --> 00:46:53,120
+um and that is maybe not really efficient for anybody involved so i'm i'm wondering like where
+
+389
+00:46:53,120 --> 00:46:58,000
+we place that on the timeline but would need to have a look um because we're working on that timeline
+
+390
+00:46:58,000 --> 00:47:08,320
+right now so yeah jesse my thinking is i can i can start um circulating the kind of ballpark
+
+391
+00:47:08,320 --> 00:47:16,720
+um budget with people like john and the board so that at least that's in their mind's eye there
+
+392
+00:47:17,760 --> 00:47:21,920
+this has been catching by surprise when we pitch it i think you're right i think the next stage
+
+393
+00:47:21,920 --> 00:47:28,480
+would be to take the timelines that you guys have presented there and map them to your broader timeline
+
+394
+00:47:28,480 --> 00:47:36,240
+for the project to see how this would properly phase and then once we've got the phasing and
+
+395
+00:47:36,240 --> 00:47:41,040
+the budget proposal together we can kind of go and do a pitch internally to try and secure
+
+396
+00:47:41,040 --> 00:47:46,240
+budget but i think um yes i like the costings guys thank you so much they're super useful to start
+
+397
+00:47:46,800 --> 00:47:51,920
+uh kind of having conversations internally but i think yeah the next step is what what would the right
+
+398
+00:47:51,920 --> 00:47:57,840
+timeline look like that works for jesse and the dragon miles team doing it the right way but also for
+
+399
+00:47:57,840 --> 00:48:04,560
+you guys at nitro sounds good sounds good is there's anything else that you would like to see
+
+400
+00:48:04,560 --> 00:48:12,320
+in this overview uh outside of the nitro slide which i decided to skip uh anything i can add else
+
+401
+00:48:12,320 --> 00:48:17,120
+so then you know you will have all of the information needed for your internal discussions
+
+402
+00:48:17,120 --> 00:48:31,120
+um this is um so one of the things that would be helpful is get an understanding of like how many
+
+403
+00:48:31,120 --> 00:48:41,040
+platforms on on mobile does this cover is it ios and uh uh and android what is is like what's but what's
+
+404
+00:48:41,040 --> 00:48:51,120
+potentially excluded um um i would say depends like what was the plan for the uh for the lol
+
+405
+00:48:51,120 --> 00:48:54,800
+lod's for console like what what was the timeline on dragon wilds
+
+406
+00:48:56,960 --> 00:49:01,760
+console consoles what you mean for dragon wilds or for shadows uh
+
+407
+00:49:01,760 --> 00:49:14,800
+uh for both uh uh consoles would be much much later um for for for dragon wilds it's uh this year in
+
+408
+00:49:14,800 --> 00:49:16,240
+september okay
+
+409
+00:49:20,160 --> 00:49:27,040
+yeah but in regards to the mobile platforms with this kind of like overview we're looking into uh both
+
+410
+00:49:27,040 --> 00:49:37,280
+ios and android um what is excluded that is the good question uh usually we focus only on those two uh
+
+411
+00:49:37,920 --> 00:49:46,960
+no but i mean i mean like for instance device types and um um i don't know legacy devices like what's
+
+412
+00:49:46,960 --> 00:49:56,160
+what's the usual range that for what's the range that you um handled for um for warframe for instance
+
+413
+00:49:56,160 --> 00:50:02,560
+like are there you know edge cases or certain certain devices that you don't do or is it certain
+
+414
+00:50:02,560 --> 00:50:09,840
+technology those certain chipsets that you don't support or whatever okay okay yeah we can i'm sure
+
+415
+00:50:09,840 --> 00:50:16,320
+we can pull out kind of like a a little bit of the kind of like numbers from the warframe but also part
+
+416
+00:50:16,320 --> 00:50:22,320
+of of that r d would be actually kind of like us providing kind of like the specs that we uh we think
+
+417
+00:50:22,320 --> 00:50:28,080
+that we we could achieve here in regards to kind of like the device and how low we can get without
+
+418
+00:50:28,640 --> 00:50:34,960
+necessarily it's basically you know you pick your battle like how how much you're optimizing whether
+
+419
+00:50:34,960 --> 00:50:40,560
+whether you know those very low end devices are worth it or not and that is something that's kind of
+
+420
+00:50:40,560 --> 00:50:45,600
+like also part of the r d but for from the warframe i'm sure we can pull out some numbers
+
+421
+00:50:45,600 --> 00:50:52,560
+for your reference here for sure okay yeah i think a prof profiling pass would make sense to
+
+422
+00:50:52,560 --> 00:50:58,560
+inform that to know where they're the bottlenecks the the largest bottleneck so in the research you
+
+423
+00:50:58,560 --> 00:51:03,760
+know we could do that on dragon wilds to understand a little bit more like like yeah where are the areas
+
+424
+00:51:03,760 --> 00:51:10,160
+i think animation is one that we've found as a bottleneck for one of our projects that we're working on
+
+425
+00:51:10,160 --> 00:51:17,440
+um because mobile has only limited amount of processing power so then that's where the biggest
+
+426
+00:51:17,440 --> 00:51:22,640
+kind of tends to be the biggest problem like uh challenge with that but anyways we can provide
+
+427
+00:51:22,640 --> 00:51:30,560
+more information on that uh quick question also from my side i i know that you mentioned that in
+
+428
+00:51:30,560 --> 00:51:35,680
+regards to the mobile you still need to approve the mobile purchase but because that is wasn't something
+
+429
+00:51:35,680 --> 00:51:42,080
+i guess in the talks before in in the beginning or uh so that understand does it mean that also
+
+430
+00:51:42,080 --> 00:51:47,120
+kind of like the r d phase is something that would need to be kind of like separately approved as well
+
+431
+00:51:47,120 --> 00:51:54,880
+would need to go through that phase okay yeah it all needs to be pitched yeah nice try we're in the
+
+432
+00:51:56,160 --> 00:52:01,120
+private equity world where jesse's only got the the pounds he's already kind of pitched and had
+
+433
+00:52:01,120 --> 00:52:07,520
+approved so yeah for literally everything we just go on the journey of uh get both together get john
+
+434
+00:52:07,520 --> 00:52:12,720
+on the side and then pitch it to the board for additional funding okay sounds good sounds good
+
+435
+00:52:12,720 --> 00:52:17,840
+and what are that usually kind of like i understand that most likely it depends but what
+
+436
+00:52:17,840 --> 00:52:25,120
+what that journey usually takes time wise it depends on it depends on the um it depends the size of
+
+437
+00:52:25,120 --> 00:52:33,280
+the investment required um um uh if it's a small enough number there's a world where our cfo can
+
+438
+00:52:33,280 --> 00:52:43,680
+approve it um but i'm imagining this is larger than that number so it would be a case of having the pitch
+
+439
+00:52:43,680 --> 00:52:49,680
+ready and inserting into one of our board meetings but we have a board meeting every month uh usually any
+
+440
+00:52:50,640 --> 00:52:57,120
+um budget request we do about two to three work weeks of kind of pre one-on-ones with various board members
+
+441
+00:52:57,120 --> 00:53:02,000
+to get them on site before going to the boardroom so they'll just all say yes and rubber stamp it um
+
+442
+00:53:03,920 --> 00:53:11,120
+so i think if we if if we if we said we wanted to get started tomorrow i think realistically we'd be looking at
+
+443
+00:53:11,120 --> 00:53:23,920
+two months to actually get the the green light to go okay that was good that was good yeah um although
+
+444
+00:53:23,920 --> 00:53:30,640
+it's it's i don't think we've done something quite like this for a while jesse it feels like a long time
+
+445
+00:53:30,640 --> 00:53:43,440
+we've asked for a the last one was probably a year ago yeah yeah yeah um so one thing i'm quite keen to do if we can is
+
+446
+00:53:45,200 --> 00:53:50,080
+jesse's obviously jesse's here obviously evolving um lots of thinking around shadows at the moment so
+
+447
+00:53:50,080 --> 00:53:55,680
+rather than going with an isolated ask for this i think we tie into a bigger conversation about
+
+448
+00:53:56,560 --> 00:54:01,840
+shadows of action for in general and jesse we probably start that i imagine through
+
+449
+00:54:02,640 --> 00:54:06,880
+the conversation i had with mark yeah figure for the jobs mark
+
+450
+00:54:09,040 --> 00:54:16,560
+it would so it would need um it i imagine that in order for it to be a fruitful discussion it would
+
+451
+00:54:16,560 --> 00:54:23,520
+need to have indeed the cost picture the timeline but also the benefits uh like what what what a forecast
+
+452
+00:54:23,520 --> 00:54:29,280
+what it might be delivering delivering and we are doing that together we have for the rest of the
+
+453
+00:54:29,280 --> 00:54:37,680
+project we're doing that um um this month uh taking an updated view so it could be rolled into uh into
+
+454
+00:54:37,680 --> 00:54:45,680
+there as an option uh optionality and it requires more work from stew and fox um in order to forecast
+
+455
+00:54:45,680 --> 00:54:51,680
+what what this could mean and then yeah i think yeah i think that's what we need to pitch right we've
+
+456
+00:54:51,680 --> 00:54:56,080
+got the cost from you guys already what's the ideal timeline jesse so when we need to start spending
+
+457
+00:54:56,080 --> 00:55:05,680
+that money and then from fox and stew um what's the roi timeline look like and then we can go and have
+
+458
+00:55:05,680 --> 00:55:10,400
+the conversation but in the meantime i'd say i'll start circulating numbers of people because i think the general
+
+459
+00:55:10,400 --> 00:55:16,640
+sense that this is probably going to be a smart thing to do and that the the roi pitch will pan out
+
+460
+00:55:16,640 --> 00:55:22,240
+um but nobody's got quite a sense of what the numbers look like yeah so um well i'll do initially
+
+461
+00:55:22,240 --> 00:55:26,720
+i'll chat with jen who's our cfo this week as well jesse to get her take on how best to approach it
+
+462
+00:55:27,520 --> 00:55:34,800
+yep sounds good sounds good from our perspective kind of like let's say in ideal world and i know where
+
+463
+00:55:34,800 --> 00:55:42,560
+this is not the world we live in uh unfortunately we're we're hoping to potentially uh do the start
+
+464
+00:55:42,560 --> 00:55:49,360
+day kind of like the r d beginning of the summer it may be even sooner than that in uh in case so
+
+465
+00:55:49,360 --> 00:55:54,880
+then when we when we get after the summer like we're going into the fall we have kind of like a little
+
+466
+00:55:54,880 --> 00:56:01,840
+bit more clear picture and then can prepare the team and they're kind of like all of the uh fun planning
+
+467
+00:56:01,840 --> 00:56:07,200
+stuff which thankfully not on my plate uh towards the end of the year when you guys will be also
+
+468
+00:56:07,200 --> 00:56:13,360
+get into the vertical flies and everything so that is of course something that would be in ideal
+
+469
+00:56:13,360 --> 00:56:18,160
+work from our side but then of course i totally understand that you need to also look into the
+
+470
+00:56:18,160 --> 00:56:23,440
+things from your side well if we're looking at kind of full time i don't i don't see any immediate
+
+471
+00:56:23,440 --> 00:56:28,480
+concerns from an approval timeline perspective it's more about making sure that the timelines sync well
+
+472
+00:56:28,480 --> 00:56:36,240
+with uh your development timelines jesse yeah so yeah i think i think if we can we can work on that
+
+473
+00:56:36,240 --> 00:56:44,000
+at the next phase how the timelines match up then uh as i'll start circulating this conceptually and i
+
+474
+00:56:44,000 --> 00:56:47,120
+think it'll be fine to to take the board on the journey
+
+475
+00:56:47,120 --> 00:56:57,600
+um sounds good i'll um i'll let uh uh carlos know uh the what the shape of the cost looks like and
+
+476
+00:56:57,600 --> 00:57:05,520
+then i'm going to ask us to and fox to um work on the forecast essentially as sue and it will be based
+
+477
+00:57:05,520 --> 00:57:12,080
+on assumptions about you know what what the game will do on on mobile given that we don't we haven't
+
+478
+00:57:12,080 --> 00:57:21,680
+entirely um complete conversations yet about stuff like um subs etc james yeah but um um it will be an
+
+479
+00:57:21,680 --> 00:57:27,360
+approach that we can take yeah yeah yeah and these are just you know just imagine that these are ball
+
+480
+00:57:27,360 --> 00:57:33,360
+bark because you know obviously we don't know on the production like how how much stuff will need to be
+
+481
+00:57:33,360 --> 00:57:39,520
+ported and or like put into the game so of course this is like you know a little bit finger in the air but
+
+482
+00:57:39,520 --> 00:57:49,120
+um rough idea i think one thing which is very much uh clear for sure is the rnt phase that one would
+
+483
+00:57:49,120 --> 00:57:58,720
+not yeah that is something that correct yes like very much locked number yeah i mean uh i'm not aware
+
+484
+00:57:58,720 --> 00:58:06,560
+that our uh board ever signs up for blank checks as in moving targets yes but um yeah we can we can
+
+485
+00:58:06,560 --> 00:58:13,280
+have a more discussion about that as well yeah i didn't mean to sorry uh just to be clear what i
+
+486
+00:58:13,280 --> 00:58:18,160
+meant was that if we do the you know research and development we'll learn more about the project and
+
+487
+00:58:18,160 --> 00:58:24,640
+you know that will also help to shape um that was the comment there yeah we don't want to have moving
+
+488
+00:58:24,640 --> 00:58:35,600
+targets no worries no worries sorry and then i think the plan is we will add into the deck a little bit
+
+489
+00:58:35,600 --> 00:58:41,360
+more in info from the kind of like the warframe experience on the target devices which that could
+
+490
+00:58:41,360 --> 00:58:48,640
+be uh looking like a little bit more clarity on the r d uh kind of like deliverables what that format
+
+491
+00:58:48,640 --> 00:58:55,680
+that will be and everything and then uh maybe we will also add a note and kind of like from our point
+
+492
+00:58:55,680 --> 00:59:01,040
+of view suggestions on the timeline to start r d and then of course that you can take it forward and kind
+
+493
+00:59:01,040 --> 00:59:09,040
+of like uh decide from your end sounds good cool yeah sounds great and thank you for this all together
+
+494
+00:59:09,040 --> 00:59:16,720
+guys it's it's it's really really appreciated now let's uh get it get improving it right now sounds
+
+495
+00:59:16,720 --> 00:59:26,480
+like a big plan and if any of you find a baby yoda i'm here willing to play it i um i don't need any more
+
+496
+00:59:26,480 --> 00:59:32,720
+chocolate but i might i might please do things like you can like i would really really appreciate
+
+497
+00:59:33,920 --> 00:59:39,040
+i kind of want to see the quality of these toys so i'm expecting they're really they're actually
+
+498
+00:59:39,040 --> 00:59:44,480
+not that bad i i was showing to the guys but now it fell somewhere so i i don't i'm not going to be
+
+499
+00:59:44,480 --> 00:59:51,360
+in an awkward position trying to retrieve it but i can share with you the picture yeah that's fair i'll learn
+
+500
+00:59:51,360 --> 00:59:57,600
+i'll buy i'll buy i'll buy an egg this evening and if i get a baby i'll let you know awesome i'll be so jealous
+
+501
+00:59:57,600 --> 01:00:03,200
+oh my god i mean i know that if i find one my kids will be like yeah it's mine
+
+502
+01:00:04,720 --> 01:00:08,400
+you have it for two seconds oh this is really nice and then all right
+
+503
+01:00:10,800 --> 01:00:11,680
+all right pleasure
+
+504
+01:00:11,680 --> 01:00:17,760
+my own kids in this way so nobody's stealing the doors from me you're stealing them from others
+
+505
+01:00:18,880 --> 01:00:28,240
+yeah exactly all righty thank you both so much updated back in the next couple of days the latest
+
+506
+01:00:28,240 --> 01:00:40,400
+so there's not that much information thank you anatha have a great rest of the night
+

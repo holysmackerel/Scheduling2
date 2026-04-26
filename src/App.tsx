@@ -300,6 +300,25 @@ export default function App() {
   const [rangeStart, setRangeStart] = useState(initialStart);
   const [rangeWeeks, setRangeWeeks] = useState(initialWeeks);
   const allDays = useMemo(() => Array.from({ length: rangeWeeks * 7 }, (_, i) => addD(rangeStart, i)), [rangeStart, rangeWeeks]);
+  const careTotals = useMemo(() => {
+    const totals = {
+      collin: { days: 0, hours: 0, heliHours: 0 },
+      tiia: { days: 0, hours: 0, heliHours: 0 },
+    };
+    for (const d of allDays) {
+      const k = fmt(d);
+      const entry = edits[k] || data?.schedule?.[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
+      const owner = entry.night === "tiia" ? "tiia" : "collin";
+      totals[owner].days += 1;
+      totals[owner].hours += 24;
+      if (typeof entry.note === "string" && /heli/i.test(entry.note)) {
+        // Business rule: mention of Heli implies at least 1 bedtime hour for the sleep parent.
+        totals[owner].hours += 1;
+        totals[owner].heliHours += 1;
+      }
+    }
+    return totals;
+  }, [allDays, data, edits]);
 
   const canRemovePrev = rangeStart.getTime() < initialStart.getTime();
   const canRemoveNext = (rangeStart.getTime() + (rangeWeeks - 1) * 7 * 24 * 60 * 60 * 1000) > initialStart.getTime();
@@ -449,16 +468,14 @@ export default function App() {
     const sched = { ...data.schedule };
     if (status === "accepted") {
       const prop = data.proposals.find((p: any) => p.id === id);
-      if (prop) prop.changes.forEach((c: any) => { sched[c.date] = { ...sched[c.date], night: c.to.night, pickup: c.to.pickup, daycare: c.to.daycare }; });
+      if (prop) prop.changes.forEach((c: any) => { sched[c.date] = { ...sched[c.date], night: c.to.night, pickup: c.to.pickup, daycare: c.to.daycare, note: c.to.note || "" }; });
     }
     save({ ...data, proposals: props, schedule: sched });
   };
 
-  const handleProposal = (proposal: any, noteChanges: Record<string, string>) => {
+  const handleProposal = (proposal: any) => {
     if (!data) return;
-    const sched = { ...data.schedule };
-    Object.keys(noteChanges).forEach((k) => { sched[k] = { ...sched[k], note: noteChanges[k] }; });
-    save({ ...data, schedule: sched, proposals: [...data.proposals, proposal] });
+    save({ ...data, proposals: [...data.proposals, proposal] });
     setEdits({});
   };
 
@@ -468,22 +485,40 @@ export default function App() {
     save({ ...data, proposals: next });
   }, [data, save]);
 
+  const handleForceExistingProposal = useCallback((id: string) => {
+    if (!data || !user) return;
+    const now = new Date().toISOString();
+    const target = data.proposals.find((p: any) => p.id === id);
+    if (!target || target.status !== "pending") return;
+    const sched = { ...data.schedule };
+    target.changes.forEach((c: any) => {
+      sched[c.date] = { ...sched[c.date], night: c.to.night, pickup: c.to.pickup, daycare: c.to.daycare, note: c.to.note || "" };
+    });
+    const proposals = data.proposals.map((p: any) => (
+      p.id !== id ? p : {
+        ...p,
+        status: "forced",
+        response: "Force approved from active proposals",
+        respondedBy: user,
+        respondedAt: now,
+        forcedBy: user,
+        forcedAt: now,
+      }
+    ));
+    save({ ...data, schedule: sched, proposals });
+  }, [data, save, user]);
+
   const collectProposalChanges = useCallback(() => {
     if (!data) return null;
     const changes = Object.keys(edits).map((k) => {
       const original = data.schedule[k] || { night: "collin", pickup: "5:30 PM", daycare: false, note: "" };
       return {
         date: k,
-        was: { night: original.night, pickup: original.pickup, daycare: original.daycare },
-        to: { night: edits[k].night, pickup: edits[k].pickup, daycare: edits[k].daycare },
+        was: { night: original.night, pickup: original.pickup, daycare: original.daycare, note: original.note || "" },
+        to: { night: edits[k].night, pickup: edits[k].pickup, daycare: edits[k].daycare, note: edits[k].note || "" },
       };
     });
-    const noteChanges: Record<string, string> = {};
-    Object.keys(edits).forEach((k) => {
-      const originalNote = data.schedule[k]?.note || "";
-      if (edits[k].note !== originalNote) noteChanges[k] = edits[k].note;
-    });
-    return { changes, noteChanges };
+    return { changes };
   }, [data, edits]);
 
   const handleSendProposal = useCallback(() => {
@@ -500,7 +535,7 @@ export default function App() {
       response: "",
       respondedBy: null,
       respondedAt: null,
-    }, payload.noteChanges);
+    });
   }, [collectProposalChanges, user]);
 
   const handleForceProposal = useCallback(() => {
@@ -510,10 +545,7 @@ export default function App() {
     const now = new Date().toISOString();
     const sched = { ...data.schedule };
     payload.changes.forEach((c: any) => {
-      sched[c.date] = { ...sched[c.date], night: c.to.night, pickup: c.to.pickup, daycare: c.to.daycare };
-    });
-    Object.keys(payload.noteChanges).forEach((k) => {
-      sched[k] = { ...sched[k], note: payload.noteChanges[k] };
+      sched[c.date] = { ...sched[c.date], night: c.to.night, pickup: c.to.pickup, daycare: c.to.daycare, note: c.to.note || "" };
     });
     save({
       ...data,
@@ -681,11 +713,16 @@ export default function App() {
               </div>
               <div className="space-y-1">
                 {p.changes.map((c: any) => (
-                  <div key={c.date} className="text-sm text-slate-600 flex items-center gap-2">
-                    <span className="font-medium min-w-[80px]">{fmtDay(new Date(c.date))}</span>
-                    <Pill who={c.was.night} theme={activeTheme} small />
-                    <ChevronRight className="w-3 h-3 text-slate-300" />
-                    <Pill who={c.to.night} theme={activeTheme} small />
+                  <div key={c.date} className="text-sm text-slate-600 bg-slate-50/60 rounded-lg px-2 py-1.5">
+                    <span className="font-medium min-w-[80px] block mb-1">{fmtDay(new Date(c.date))}</span>
+                    <div className="flex items-center gap-2 text-xs">
+                      <Pill who={c.was.night} theme={activeTheme} small />
+                      <ChevronRight className="w-3 h-3 text-slate-300" />
+                      <Pill who={c.to.night} theme={activeTheme} small />
+                    </div>
+                    {(c.was.daycare !== c.to.daycare) && <div className="text-xs mt-1">Daycare: {c.to.daycare ? "On" : "Off"}</div>}
+                    {(c.was.pickup !== c.to.pickup) && <div className="text-xs mt-1">Pickup: {c.was.pickup || "None"} {"->"} {c.to.pickup || "None"}</div>}
+                    {(c.was.note !== c.to.note) && <div className="text-xs mt-1 text-blue-700">Note updated</div>}
                   </div>
                 ))}
               </div>
@@ -720,6 +757,23 @@ export default function App() {
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: activeTheme.collin.primary }} /> Collin</span>
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: activeTheme.tiia.primary }} /> Tiia</span>
         {pendingIncoming.length > 0 && <span className="ml-auto text-amber-500">{pendingIncoming.length} to review</span>}
+      </div>
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        {(["collin", "tiia"] as const).map((who) => (
+          <div key={who} className="bg-white border border-slate-200 rounded-xl px-3 py-2 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: activeTheme[who].text }}>
+                {who === "collin" ? "Collin" : "Tiia"}
+              </span>
+              <span className="text-[10px] text-slate-400">Visible Range</span>
+            </div>
+            <div className="mt-1 text-sm font-semibold text-slate-800">{careTotals[who].days} days</div>
+            <div className="text-xs text-slate-600">{careTotals[who].hours} hrs</div>
+            {careTotals[who].heliHours > 0 && (
+              <div className="text-[10px] text-slate-500">includes +{careTotals[who].heliHours} hr from Heli notes</div>
+            )}
+          </div>
+        ))}
       </div>
 
       <section className="mb-8">
@@ -823,15 +877,15 @@ export default function App() {
       {(pendingIncoming.length > 0 || pendingOutgoing.length > 0) && (
         <section className="mb-12 space-y-3">
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Active Proposals</h3>
-          {pendingIncoming.map((p: any) => <ProposalCard key={p.id} p={p} type="in" theme={activeTheme} onRespond={handleRespond} onRemove={handleRemoveProposal} />)}
-          {pendingOutgoing.map((p: any) => <ProposalCard key={p.id} p={p} type="out" theme={activeTheme} onRemove={handleRemoveProposal} />)}
+          {pendingIncoming.map((p: any) => <ProposalCard key={p.id} p={p} type="in" theme={activeTheme} onRespond={handleRespond} onRemove={handleRemoveProposal} onForceApprove={handleForceExistingProposal} />)}
+          {pendingOutgoing.map((p: any) => <ProposalCard key={p.id} p={p} type="out" theme={activeTheme} onRemove={handleRemoveProposal} onForceApprove={handleForceExistingProposal} />)}
         </section>
       )}
     </div>
   );
 }
 
-function ProposalCard({ p, type, theme, onRespond, onRemove }: { p: any; type: "in" | "out"; theme: any; onRespond?: (id: string, status: string, resp: string) => void; onRemove?: (id: string) => void }) {
+function ProposalCard({ p, type, theme, onRespond, onRemove, onForceApprove }: { p: any; type: "in" | "out"; theme: any; onRespond?: (id: string, status: string, resp: string) => void; onRemove?: (id: string) => void; onForceApprove?: (id: string) => void }) {
   const [open, setOpen] = useState(type === "in");
   const [reply, setReply] = useState("");
   const otherUser = p.from === "collin" ? "Collin" : "Tiia";
@@ -848,7 +902,21 @@ function ProposalCard({ p, type, theme, onRespond, onRemove }: { p: any; type: "
         {open && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
             <div className="px-4 pb-4 space-y-3">
-              <div className="space-y-2">{p.changes.map((c: any) => <div key={c.date} className="flex items-center gap-3 text-xs bg-white/40 p-2 rounded-lg"><span className="font-bold text-slate-500 min-w-[80px]">{fmtDay(new Date(c.date))}</span><div className="flex items-center gap-2"><Pill who={c.was?.night || "collin"} theme={theme} small /><ChevronRight className="w-3 h-3 text-slate-300" /><Pill who={c.to?.night || "collin"} theme={theme} small /></div></div>)}</div>
+              <div className="space-y-2">
+                {p.changes.map((c: any) => (
+                  <div key={c.date} className="text-xs bg-white/40 p-2 rounded-lg">
+                    <div className="font-bold text-slate-500 min-w-[80px] mb-1">{fmtDay(new Date(c.date))}</div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Pill who={c.was?.night || "collin"} theme={theme} small />
+                      <ChevronRight className="w-3 h-3 text-slate-300" />
+                      <Pill who={c.to?.night || "collin"} theme={theme} small />
+                    </div>
+                    {(c.was?.daycare !== c.to?.daycare) && <div>Daycare: {c.to?.daycare ? "On" : "Off"}</div>}
+                    {(c.was?.pickup !== c.to?.pickup) && <div>Pickup: {c.was?.pickup || "None"} {"->"} {c.to?.pickup || "None"}</div>}
+                    {(c.was?.note !== c.to?.note) && <div className="text-blue-700">Note updated</div>}
+                  </div>
+                ))}
+              </div>
               {type === "in" && onRespond && (
                 <div className="pt-3 border-t border-amber-200/50 space-y-3">
                   <textarea value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Add a reply..." className="w-full text-xs p-3 bg-white border border-amber-200 rounded-xl outline-none focus:border-amber-400 min-h-[60px] resize-none" />
@@ -864,6 +932,14 @@ function ProposalCard({ p, type, theme, onRespond, onRemove }: { p: any; type: "
                   className="w-full py-2 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-all border border-rose-100"
                 >
                   Remove Proposal
+                </button>
+              )}
+              {onForceApprove && (
+                <button
+                  onClick={() => onForceApprove(p.id)}
+                  className="w-full py-2 text-xs font-semibold text-red-700 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all border border-red-200"
+                >
+                  Force Approve
                 </button>
               )}
             </div>
